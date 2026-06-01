@@ -5,28 +5,50 @@ export default function HookPhase() {
 
   return (
     <section className="phase hook-phase" aria-label="Introduction">
-      <div className="hook-content">
-        <span className="hook-emoji" aria-hidden="true">🤖</span>
-        <h1>L'IA débarque dans votre rayon</h1>
+      <div className="hook-card">
+        <div className="hook-app-icon" aria-hidden="true">✦</div>
+
+        <span className="hook-badge">Quiz de sensibilisation disponible</span>
+
+        <h1 className="hook-title">
+          L'IA débarque dans votre rayon
+        </h1>
+
         <p className="hook-subtitle">
-          Êtes-vous prêt à manager avec l'intelligence artificielle ?
+          Découvrez les opportunités et les risques de l'IA dans votre quotidien professionnel
         </p>
-        <p className="hook-description">
-          3 mises en situation réelles. 3 décisions à prendre.
-          <br />
-          Découvrez votre profil manager face à l'IA.
-        </p>
-        <div className="hook-meta">
-          <span>⏱️ 5 minutes</span>
-          <span>📱 Aucune inscription</span>
+
+        <div className="hook-stats">
+          <div className="hook-stat">
+            <span className="hook-stat-label">Durée</span>
+            <span className="hook-stat-value">5 min</span>
+          </div>
+          <div className="hook-stat">
+            <span className="hook-stat-label">Niveau</span>
+            <span className="hook-stat-value">Débutant</span>
+          </div>
+          <div className="hook-stat">
+            <span className="hook-stat-label">Format</span>
+            <span className="hook-stat-value">Interactif</span>
+          </div>
         </div>
-        <button
-          className="btn btn-primary btn-lg"
-          onClick={startQuiz}
-          aria-label="Commencer le parcours de sensibilisation"
-        >
-          C'est parti !
+
+        <div className="hook-learn">
+          <p className="hook-learn-title">Ce que vous allez apprendre :</p>
+          <ul className="hook-learn-list">
+            <li>Identifier les cas d'usage pertinents de l'IA en magasin</li>
+            <li>Reconnaître les risques liés à une mauvaise utilisation</li>
+            <li>Adopter les bonnes pratiques au quotidien</li>
+          </ul>
+        </div>
+
+        <button className="hook-cta" onClick={startQuiz}>
+          Commencer la formation
         </button>
+
+        <p className="hook-footer">
+          3 mises en situation · Aucune inscription · Propulsé par NOVAÏ
+        </p>
       </div>
     </section>
   );

@@ -21,7 +21,6 @@ export default function useQuiz() {
     const maxCount = Math.max(...Object.values(counts));
     const topProfiles = Object.keys(counts).filter((k) => counts[k] === maxCount);
 
-    // En cas d'égalité → Explorateur par défaut
     const profileKey = topProfiles.length === 1 ? topProfiles[0] : 'explorer';
     return { key: profileKey, ...profiles[profileKey] };
   }
@@ -30,6 +29,12 @@ export default function useQuiz() {
 
   const selectChoice = (choice) =>
     dispatch({ type: 'SELECT_CHOICE', payload: choice });
+
+  const submitChoice = () =>
+    dispatch({ type: 'SUBMIT_CHOICE' });
+
+  const reviewChoices = () =>
+    dispatch({ type: 'REVIEW_CHOICES' });
 
   const nextScenario = (scenarioId) =>
     dispatch({ type: 'NEXT_SCENARIO', payload: { scenarioId } });
@@ -48,6 +53,8 @@ export default function useQuiz() {
     progress,
     startQuiz,
     selectChoice,
+    submitChoice,
+    reviewChoices,
     nextScenario,
     restart,
   };

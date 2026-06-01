@@ -1,15 +1,18 @@
-const choiceLabels = ['A', 'B', 'C'];
+const iconKeys = ['a', 'b', 'c'];
 
-export default function ChoiceButton({ choice, index, isSelected, isDisabled, onSelect }) {
+export default function ChoiceButton({ choice, index, isSelected, onSelect }) {
+  const key = iconKeys[index] ?? 'a';
+
   return (
     <button
-      className={`btn btn-choice${isSelected ? ' selected' : ''}`}
+      className={`btn-choice${isSelected ? ' selected' : ''}`}
       onClick={() => onSelect(choice)}
-      disabled={isDisabled}
       aria-pressed={isSelected}
-      aria-label={`Choix ${choiceLabels[index]} : ${choice.label}`}
+      aria-label={`Choix ${key.toUpperCase()} : ${choice.label}`}
     >
-      <span className="choice-badge" aria-hidden="true">{choiceLabels[index]}</span>
+      <span className={`choice-icon choice-icon--${key}`} aria-hidden="true">
+        {key.toUpperCase()}
+      </span>
       <span className="choice-label">{choice.label}</span>
     </button>
   );

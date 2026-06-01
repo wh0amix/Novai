@@ -3,12 +3,30 @@ import ChoiceButton from './ChoiceButton';
 import Feedback from './Feedback';
 
 export default function ScenarioCard({ scenario }) {
-  const { showFeedback, lastChoice, selectChoice, nextScenario } = useQuiz();
+  const { showFeedback, lastChoice, selectChoice, submitChoice, nextScenario } = useQuiz();
+
+  if (showFeedback && lastChoice) {
+    return (
+      <Feedback
+        choice={lastChoice}
+        onNext={() => nextScenario(scenario.id)}
+      />
+    );
+  }
 
   return (
     <article className="scenario-card" aria-label={`Scénario : ${scenario.title}`}>
       <h2 className="scenario-title">{scenario.title}</h2>
-      <p className="scenario-context">{scenario.context}</p>
+
+      <div className="scenario-context-card">
+        <div className="scenario-context-icon" aria-hidden="true">📋</div>
+        <div>
+          <p className="scenario-context-label">Contexte</p>
+          <p className="scenario-context-text">{scenario.context}</p>
+        </div>
+      </div>
+
+      <p className="scenario-question">Comment gérez-vous cette situation ?</p>
 
       <div className="choices" role="group" aria-label="Vos choix">
         {scenario.choices.map((choice, index) => (
@@ -17,18 +35,21 @@ export default function ScenarioCard({ scenario }) {
             choice={choice}
             index={index}
             isSelected={lastChoice?.id === choice.id}
-            isDisabled={showFeedback}
             onSelect={selectChoice}
           />
         ))}
       </div>
 
-      {showFeedback && lastChoice && (
-        <Feedback
-          feedback={lastChoice.feedback}
-          onNext={() => nextScenario(scenario.id)}
-        />
-      )}
+      <div className="scenario-actions">
+        <button
+          className="btn-validate"
+          onClick={submitChoice}
+          disabled={!lastChoice}
+          aria-label="Valider mon choix"
+        >
+          Valider mon choix
+        </button>
+      </div>
     </article>
   );
 }

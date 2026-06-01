@@ -6,15 +6,9 @@ export default function ScenarioPhase() {
 
   return (
     <section className="phase scenario-phase" aria-label="Scénario en cours">
-      <div className="progress-bar-container" role="progressbar" aria-valuenow={progress.current} aria-valuemin={1} aria-valuemax={progress.total}>
-        <div
-          className="progress-bar-fill"
-          style={{ width: `${(progress.current / progress.total) * 100}%` }}
-        />
-      </div>
-      <p className="progress-text">
+      <span className="scenario-progress-badge">
         Scénario {progress.current} / {progress.total}
-      </p>
+      </span>
       <ScenarioCard scenario={currentScenario} />
     </section>
   );

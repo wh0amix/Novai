@@ -4,7 +4,7 @@ const QuizContext = createContext(null);
 const QuizDispatchContext = createContext(null);
 
 const initialState = {
-  currentPhase: 'hook', // 'hook' | 'scenario' | 'result'
+  currentPhase: 'hook',
   currentScenarioIndex: 0,
   answers: [],
   showFeedback: false,
@@ -19,8 +19,19 @@ function quizReducer(state, action) {
     case 'SELECT_CHOICE':
       return {
         ...state,
-        showFeedback: true,
         lastChoice: action.payload,
+      };
+
+    case 'SUBMIT_CHOICE':
+      return {
+        ...state,
+        showFeedback: true,
+      };
+
+    case 'REVIEW_CHOICES':
+      return {
+        ...state,
+        showFeedback: false,
       };
 
     case 'NEXT_SCENARIO': {
