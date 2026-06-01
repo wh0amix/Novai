@@ -11,7 +11,7 @@ export default function HookPhase() {
         <span className="hook-badge">Quiz de sensibilisation disponible</span>
 
         <h1 className="hook-title">
-          L'IA débarque dans votre rayon
+          Intelligence Artificielle & Grande Distribution
         </h1>
 
         <p className="hook-subtitle">
@@ -21,7 +21,7 @@ export default function HookPhase() {
         <div className="hook-stats">
           <div className="hook-stat">
             <span className="hook-stat-label">Durée</span>
-            <span className="hook-stat-value">5 min</span>
+            <span className="hook-stat-value">8-10 min</span>
           </div>
           <div className="hook-stat">
             <span className="hook-stat-label">Niveau</span>
