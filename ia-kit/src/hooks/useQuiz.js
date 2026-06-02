@@ -27,6 +27,8 @@ export default function useQuiz() {
 
   const startQuiz = () => dispatch({ type: 'START_QUIZ' });
 
+  const goToScenarios = () => dispatch({ type: 'GO_TO_SCENARIOS' });
+
   const selectChoice = (choice) =>
     dispatch({ type: 'SELECT_CHOICE', payload: choice });
 
@@ -52,6 +54,7 @@ export default function useQuiz() {
     userProfile,
     progress,
     startQuiz,
+    goToScenarios,
     selectChoice,
     submitChoice,
     reviewChoices,

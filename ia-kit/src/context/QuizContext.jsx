@@ -14,6 +14,9 @@ const initialState = {
 function quizReducer(state, action) {
   switch (action.type) {
     case 'START_QUIZ':
+      return { ...state, currentPhase: 'intro' };
+
+    case 'GO_TO_SCENARIOS':
       return { ...state, currentPhase: 'scenario' };
 
     case 'SELECT_CHOICE':
