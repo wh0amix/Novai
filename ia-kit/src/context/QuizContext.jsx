@@ -41,6 +41,7 @@ function quizReducer(state, action) {
           scenarioId: action.payload.scenarioId,
           choiceId: state.lastChoice.id,
           profile: state.lastChoice.profile,
+          points: state.lastChoice.points,
         },
       ];
       const nextIndex = state.currentScenarioIndex + 1;
