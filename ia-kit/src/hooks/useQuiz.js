@@ -20,9 +20,13 @@ export default function useQuiz() {
 
     const maxCount = Math.max(...Object.values(counts));
     const topProfiles = Object.keys(counts).filter((k) => counts[k] === maxCount);
-
     const profileKey = topProfiles.length === 1 ? topProfiles[0] : 'explorer';
-    return { key: profileKey, ...profiles[profileKey] };
+
+    const score = Math.round(
+      answers.reduce((sum, a) => sum + (a.points ?? 0), 0) / answers.length
+    );
+
+    return { key: profileKey, ...profiles[profileKey], score };
   }
 
   const startQuiz = () => dispatch({ type: 'START_QUIZ' });
