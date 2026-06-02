@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import useQuiz from '../hooks/useQuiz';
+import { sendResultsToHR } from '../services/email';
 
 const keyPoints = [
   "L'IA est un assistant, jamais un décideur final",
@@ -48,7 +50,19 @@ const nextSteps = [
 ];
 
 export default function ResultPhase() {
-  const { userProfile, showResources } = useQuiz();
+  const { userProfile, answers, showResources } = useQuiz();
+  const emailSentRef = useRef(false);
+
+  useEffect(() => {
+    if (!userProfile || emailSentRef.current) return;
+    emailSentRef.current = true;
+
+    sendResultsToHR({ profile: userProfile, score: userProfile.score, answers })
+      .then((res) => {
+        if (!res?.skipped) console.info('[Brevo] Email RH envoyé avec succès.');
+      })
+      .catch((err) => console.error('[Brevo] Échec envoi email :', err.message));
+  }, [userProfile, answers]);
 
   if (!userProfile) return null;
 
