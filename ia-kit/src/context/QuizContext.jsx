@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
+import { verifyIdentityToken } from '../services/token';
 
 const QuizContext = createContext(null);
 const QuizDispatchContext = createContext(null);
@@ -9,6 +10,7 @@ const initialState = {
   answers: [],
   showFeedback: false,
   lastChoice: null,
+  userIdentity: null,
 };
 
 function quizReducer(state, action) {
@@ -76,7 +78,10 @@ function quizReducer(state, action) {
       };
 
     case 'RESTART':
-      return { ...initialState };
+      return { ...initialState, userIdentity: state.userIdentity };
+
+    case 'INIT_IDENTITY':
+      return { ...state, userIdentity: action.payload };
 
     default:
       return state;
@@ -85,6 +90,15 @@ function quizReducer(state, action) {
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(quizReducer, initialState);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (!token) return;
+    verifyIdentityToken(token).then((identity) => {
+      if (identity) dispatch({ type: 'INIT_IDENTITY', payload: identity });
+    });
+  }, []);
 
   return (
     <QuizContext.Provider value={state}>

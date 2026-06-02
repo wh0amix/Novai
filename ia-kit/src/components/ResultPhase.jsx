@@ -50,14 +50,14 @@ const nextSteps = [
 ];
 
 export default function ResultPhase() {
-  const { userProfile, answers, showResources } = useQuiz();
+  const { userProfile, answers, showResources, userIdentity } = useQuiz();
   const emailSentRef = useRef(false);
 
   useEffect(() => {
     if (!userProfile || emailSentRef.current) return;
     emailSentRef.current = true;
 
-    sendResultsToHR({ profile: userProfile, score: userProfile.score, answers })
+    sendResultsToHR({ profile: userProfile, score: userProfile.score, answers, userIdentity })
       .then((res) => {
         if (!res?.skipped) console.info('[Brevo] Email RH envoyé avec succès.');
       })
