@@ -43,6 +43,8 @@ export default function useQuiz() {
   const nextScenario = (scenarioId) =>
     dispatch({ type: 'NEXT_SCENARIO', payload: { scenarioId } });
 
+  const showResources = () => dispatch({ type: 'SHOW_RESOURCES' });
+  const showResults = () => dispatch({ type: 'SHOW_RESULTS' });
   const restart = () => dispatch({ type: 'RESTART' });
 
   const progress = {
@@ -60,6 +62,8 @@ export default function useQuiz() {
     submitChoice,
     reviewChoices,
     nextScenario,
+    showResources,
+    showResults,
     restart,
   };
 }
