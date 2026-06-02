@@ -1,5 +1,5 @@
 import useQuiz from '../hooks/useQuiz';
-import HookPhase from './HookPhase';
+import Home from './Home';
 import ScenarioPhase from './ScenarioPhase';
 import ResultPhase from './ResultPhase';
 
@@ -8,7 +8,7 @@ export default function PhaseRouter() {
 
   switch (currentPhase) {
     case 'hook':
-      return <HookPhase />;
+      return <Home />;
     case 'scenario':
       return <ScenarioPhase />;
     case 'result':

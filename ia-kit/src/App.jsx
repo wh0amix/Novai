@@ -6,7 +6,7 @@ function App() {
     <AppProvider>
       <div className="app">
         <header className="app-header">
-          <img src="/LOGO-D%C3%89GRAD%C3%89.svg" alt="NOVAÏ" className="app-logo" />
+          <img src="/logo-degrade.svg" alt="NOVAÏ" className="app-logo" />
           <nav className="app-nav">
             <span className="app-nav-link">Formation</span>
             <span className="app-nav-link">Ressources</span>
