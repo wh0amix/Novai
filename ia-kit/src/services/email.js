@@ -17,7 +17,7 @@ const SCENARIO_LABELS = {
   'director-report': 'Rapport au directeur',
 };
 
-export async function sendResultsToHR({ profile, score, answers }) {
+export async function sendResultsToHR({ profile, score, answers, userIdentity }) {
   if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
     console.warn('[EmailJS] Variables d\'environnement manquantes — email ignoré.');
     return;
@@ -33,17 +33,24 @@ export async function sendResultsToHR({ profile, score, answers }) {
     return `${scenario} → Choix ${a.choiceId.toUpperCase()} (${a.points ?? '?'} pts)`;
   }).join('\n');
 
+  const employeeNom = userIdentity?.nom ?? 'Inconnu';
+  const employeePrenom = userIdentity?.prenom ?? '';
+  const employeeUid = userIdentity?.uid ?? 'anonyme';
+
   await emailjs.send(
     SERVICE_ID,
     TEMPLATE_ID,
     {
-      to_email:      HR_EMAIL,
-      profile_label: profileLabel,
-      profile_tagline: profile.tagline ?? '',
-      score:         `${score}%`,
+      to_email:         HR_EMAIL,
+      employee_prenom:  employeePrenom,
+      employee_nom:     employeeNom,
+      employee_uid:     employeeUid,
+      profile_label:    profileLabel,
+      profile_tagline:  profile.tagline ?? '',
+      score:            `${score}%`,
       date,
-      answers_text:  answersText,
-      scenarios_done: `${answers.length} / 3`,
+      answers_text:     answersText,
+      scenarios_done:   `${answers.length} / 3`,
     },
     PUBLIC_KEY,
   );
