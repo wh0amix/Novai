@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <section className="phase hook-phase" aria-label="Introduction">
       <div className="hook-card">
-        <img src="/Logo-seul.svg" alt="" className="hook-app-icon" aria-hidden="true" />
+        <img src="/logo-seul.svg" alt="" className="hook-app-icon" aria-hidden="true" />
 
         <span className="hook-badge">Nouveau module disponible</span>
 
