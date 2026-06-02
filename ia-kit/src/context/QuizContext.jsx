@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { verifyIdentityToken } from '../services/token';
+import scenarios from '../data/scenarios';
 
 const QuizContext = createContext(null);
 const QuizDispatchContext = createContext(null);
@@ -50,7 +51,7 @@ function quizReducer(state, action) {
         },
       ];
       const nextIndex = state.currentScenarioIndex + 1;
-      const isFinished = nextIndex >= 3;
+      const isFinished = nextIndex >= scenarios.length;
 
       return {
         ...state,

@@ -1,14 +1,43 @@
 import { useEffect, useRef } from 'react';
 import useQuiz from '../hooks/useQuiz';
 import { sendResultsToHR } from '../services/email';
+import scenarios from '../data/scenarios';
 
-const keyPoints = [
-  "L'IA est un assistant, jamais un décideur final",
-  'Toujours croiser les suggestions IA avec votre expertise terrain',
-  'Ne jamais déléguer votre responsabilité à un algorithme',
-  'Vérifier systématiquement les données avant de les utiliser',
-  "Garder l'humain au centre des décisions qui concernent les personnes",
-];
+const totalScenarios = scenarios.length;
+const getProfileContent = (profileKey) => {
+  const profileContent = {
+    captain: {
+      sectionTitle: 'Ce que vous faites bien',
+      listLabel: 'strengths',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      ),
+    },
+    explorer: {
+      sectionTitle: 'Ce que vous pouvez améliorer',
+      listLabel: 'improvements',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+        </svg>
+      ),
+    },
+    skeptic: {
+      sectionTitle: 'Cas d\'usage simples à explorer',
+      listLabel: 'applications',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      ),
+    },
+  };
+  return profileContent[profileKey];
+};
 
 const nextSteps = [
   {
@@ -81,7 +110,7 @@ export default function ResultPhase() {
         </div>
         <h2 className="result-title">Formation terminée !</h2>
         <p className="result-subtitle">
-          Vous avez complété les 3 scénarios de sensibilisation à l'IA
+          Vous avez complété les {totalScenarios} scénarios de sensibilisation à l'IA
         </p>
       </div>
 
@@ -103,19 +132,14 @@ export default function ResultPhase() {
         <p className="result-profile-description">{description}</p>
       </div>
 
-      {/* Key points */}
+      {/* Key points - personnalisé selon le profil */}
       <div className="result-keypoints-card">
         <h3 className="result-keypoints-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="7"/>
-            <rect x="14" y="3" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-            <rect x="3" y="14" width="7" height="7"/>
-          </svg>
-          Points clés à retenir
+          {getProfileContent(userProfile.key).icon}
+          {getProfileContent(userProfile.key).sectionTitle}
         </h3>
         <ul className="result-keypoints-list">
-          {keyPoints.map((point, i) => (
+          {(userProfile[getProfileContent(userProfile.key).listLabel] || []).map((point, i) => (
             <li key={i} className="result-keypoint-item">
               <span className="result-check" aria-hidden="true">✓</span>
               <span>{point}</span>

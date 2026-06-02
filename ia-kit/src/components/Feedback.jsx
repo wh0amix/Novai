@@ -1,22 +1,36 @@
 import useQuiz from '../hooks/useQuiz';
 
 const feedbackMeta = {
-  captain: { title: 'Bonne initiative !',   isPositive: true },
-  explorer: { title: 'Très bon réflexe !', isPositive: true },
-  skeptic:  { title: "Point d'attention",  isPositive: false },
+  1: { title: 'Excellente réponse !',   icon: '✓' },
+  0.5:  { title: 'Réponse modérée',        icon: '→' },
+  0:   { title: "Mauvaise réponse",       icon: '⚠' },
 };
 
 export default function Feedback({ choice, onNext }) {
   const { reviewChoices } = useQuiz();
-  const meta = feedbackMeta[choice.profile] ?? feedbackMeta.explorer;
-  const isPositive = meta.isPositive;
+  const meta = feedbackMeta[choice.points] ?? feedbackMeta[0.5];
+  
+  let cardClass = 'feedback-card';
+  let iconClass = 'feedback-icon';
+  
+  if (choice.points === 1) {
+    // Réponse correcte - vert (pas de classe supplémentaire)
+  } else if (choice.points === 0.5) {
+    // Réponse modérée - orange
+    cardClass += ' feedback-card--moderate';
+    iconClass += ' feedback-icon--moderate';
+  } else if (choice.points === 0) {
+    // Mauvaise réponse - rouge
+    cardClass += ' feedback-card--warning';
+    iconClass += ' feedback-icon--warning';
+  }
 
   return (
     <div className="feedback-phase phase" aria-live="polite" role="status">
-      <div className={`feedback-card${isPositive ? '' : ' feedback-card--warning'}`}>
+      <div className={cardClass}>
         <div className="feedback-header">
-          <div className={`feedback-icon${isPositive ? '' : ' feedback-icon--warning'}`} aria-hidden="true">
-            {isPositive ? '✓' : '⚠'}
+          <div className={iconClass} aria-hidden="true">
+            {meta.icon}
           </div>
           <h3 className="feedback-title">{meta.title}</h3>
         </div>
@@ -24,13 +38,15 @@ export default function Feedback({ choice, onNext }) {
         <p className="feedback-body">{choice.feedback}</p>
 
         <div className="feedback-tip">
-          <strong>Astuce :</strong> Gardez en mémoire ce principe pour vos prochaines décisions avec l'IA.
+          <strong>À retenir :</strong> {choice.feedback}
         </div>
 
         <div className="feedback-actions">
-          <button className="btn-outline" onClick={reviewChoices}>
-            ← Revoir les choix
-          </button>
+          {choice.points !== 1 && (
+            <button className="btn-outline" onClick={reviewChoices}>
+              ← Revoir les choix
+            </button>
+          )}
           <button className="btn-next" onClick={onNext}>
             Scénario suivant →
           </button>

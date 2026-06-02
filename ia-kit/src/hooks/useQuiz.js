@@ -11,7 +11,7 @@ export default function useQuiz() {
   const userProfile = calculateProfile(state.answers);
 
   function calculateProfile(answers) {
-    if (answers.length < 3) return null;
+    if (answers.length < scenarios.length) return null;
 
     const counts = answers.reduce((acc, answer) => {
       acc[answer.profile] = (acc[answer.profile] || 0) + 1;
@@ -22,9 +22,10 @@ export default function useQuiz() {
     const topProfiles = Object.keys(counts).filter((k) => counts[k] === maxCount);
     const profileKey = topProfiles.length === 1 ? topProfiles[0] : 'explorer';
 
-    const score = Math.round(
-      answers.reduce((sum, a) => sum + (a.points ?? 0), 0) / answers.length
-    );
+    // Calcul du score en pourcentage (maximum = 10 points pour 10 scénarios)
+    const totalPoints = answers.reduce((sum, a) => sum + (a.points ?? 0), 0);
+    const maxPoints = scenarios.length; // 10 points max
+    const score = Math.round((totalPoints / maxPoints) * 100);
 
     return { key: profileKey, ...profiles[profileKey], score };
   }

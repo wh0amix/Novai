@@ -16,6 +16,17 @@ export default function ScenarioCard({ scenario }) {
 
   return (
     <article className="scenario-card" aria-label={`Scénario : ${scenario.title}`}>
+      {scenario.image && (
+        <div className="scenario-image-container">
+          <img
+            src={scenario.image}
+            alt={scenario.title}
+            className="scenario-image"
+            loading="lazy"
+          />
+        </div>
+      )}
+
       <h2 className="scenario-title">
         {scenario.title}
         {scenario.subtitle && <><br /><span className="scenario-subtitle">{scenario.subtitle}</span></>}
