@@ -1,3 +1,70 @@
+/* ═══════════════════════════
+   @FONT-FACE
+═══════════════════════════ */
+@font-face {
+  font-family: 'Romie';
+  src: url('/fonts/Romie-Regular_fffb536a-9764-4142-8d5c-280676906a2c.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Romie';
+  src: url('/fonts/Romie-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Romie';
+  src: url('/fonts/Romie-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Romie';
+  src: url('/fonts/Romie-Heavy.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Monument Grotesk';
+  src: url('/fonts/ABCMonumentGrotesk-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Monument Grotesk';
+  src: url('/fonts/ABCMonumentGrotesk-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Monument Grotesk';
+  src: url('/fonts/ABCMonumentGrotesk-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Monument Grotesk';
+  src: url('/fonts/ABCMonumentGrotesk-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Monument Grotesk';
+  src: url('/fonts/ABCMonumentGrotesk-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* ─── Brand Colors ─── */
   --color-primary: #8e00fa;
@@ -23,9 +90,9 @@
   --gradient-brand: linear-gradient(227deg, #4347f3 0%, #00ff8b 100%);
 
   /* ─── Typography ─── */
-  --font-logo: 'Poppins', sans-serif;
-  --font-heading: 'Romie', 'Outfit', sans-serif;
-  --font: 'ABC Monument Grotesk', 'Inter', system-ui, sans-serif;
+  --font-logo: 'Romie', serif;
+  --font-heading: 'Romie', serif;
+  --font: 'ABC Monument Grotesk', system-ui, sans-serif;
 
   /* ─── Radius ─── */
   --radius: 16px;
@@ -77,15 +144,8 @@ body {
 }
 
 .app-logo {
-  font-family: var(--font-logo);
-  font-weight: 600;
-  font-size: 1.75rem;
-  letter-spacing: -0.01em;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
+  height: 36px;
+  width: auto;
 }
 
 .app-nav {
@@ -105,20 +165,6 @@ body {
   border: none;
   padding: 0.5rem;
 }
-
-.app-nav-login {
-  font-family: var(--font-logo);
-  font-weight: 500;
-  font-size: 1.1rem;
-  background: var(--color-primary);
-  color: var(--color-text);
-  border: none;
-  border-radius: var(--radius-pill);
-  padding: 0.75rem 2.5rem;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.app-nav-login:hover { background: var(--color-primary-hover); }
 
 /* ═══════════════════════════
    MAIN / LAYOUT
@@ -971,7 +1017,6 @@ body {
   .app-nav-link { display: none; }
   .app-header { padding: 0 1rem; }
   .app-nav { gap: 1rem; }
-  .app-nav-login { padding: 0.625rem 1.25rem; font-size: 0.9rem; }
   .hook-title { font-size: 1.6rem; }
   .hook-stats { flex-direction: column; gap: 0.5rem; }
   .result-actions { flex-direction: column; }

@@ -6,11 +6,10 @@ function App() {
     <AppProvider>
       <div className="app">
         <header className="app-header">
-          <span className="app-logo">NOVAÏ</span>
+          <img src="/LOGO-D%C3%89GRAD%C3%89.svg" alt="NOVAÏ" className="app-logo" />
           <nav className="app-nav">
             <span className="app-nav-link">Formation</span>
             <span className="app-nav-link">Ressources</span>
-            <button className="app-nav-login">Login</button>
           </nav>
         </header>
         <main className="app-main">
