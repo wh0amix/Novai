@@ -8,12 +8,15 @@ export default function ChoiceButton({ choice, index, isSelected, onSelect }) {
       className={`btn-choice${isSelected ? ' selected' : ''}`}
       onClick={() => onSelect(choice)}
       aria-pressed={isSelected}
-      aria-label={`Choix ${key.toUpperCase()} : ${choice.label}`}
+      aria-label={`Choix ${key.toUpperCase()} : ${choice.title || choice.label}`}
     >
       <span className={`choice-icon choice-icon--${key}`} aria-hidden="true">
         {key.toUpperCase()}
       </span>
-      <span className="choice-label">{choice.label}</span>
+      <span className="choice-content">
+        {choice.title && <span className="choice-title">{choice.title}</span>}
+        <span className="choice-description">{choice.label}</span>
+      </span>
     </button>
   );
 }

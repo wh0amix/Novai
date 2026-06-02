@@ -1,13 +1,15 @@
 const scenarios = [
   {
     id: 'stock-shortage',
-    title: 'Rupture de stock',
+    title: 'Rupture de stock :',
+    subtitle: 'anticiper grâce aux données',
     context:
       "Vous êtes manager du rayon frais. L'IA de votre enseigne vous alerte : d'après les données météo et l'historique des ventes, une rupture de stock sur les salades est probable ce week-end. Que faites-vous ?",
     choices: [
       {
         id: 'a',
-        label: "Je fais confiance à l'IA et je commande 30 % de salades en plus immédiatement.",
+        title: "Faire confiance à l'IA",
+        label: "Je commande 30 % de salades en plus immédiatement sur la base de l'alerte IA.",
         profile: 'captain',
         points: 80,
         feedback:
@@ -15,6 +17,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        title: "Croiser avec mon expérience",
         label: "Je croise l'alerte IA avec mon expérience terrain avant de décider du volume de commande.",
         profile: 'explorer',
         points: 100,
@@ -23,6 +26,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        title: "Ignorer l'alerte",
         label: "Je ne change rien à ma commande habituelle. Mon expérience suffit pour anticiper la demande.",
         profile: 'skeptic',
         points: 30,
@@ -33,13 +37,15 @@ const scenarios = [
   },
   {
     id: 'team-planning',
-    title: "Planning d'équipe",
+    title: "Planning d'équipe :",
+    subtitle: "l'humain avant l'algorithme",
     context:
       "Le siège déploie un nouvel outil IA qui génère automatiquement les plannings de votre équipe en fonction de l'affluence prévue. Un de vos employés, jeune parent, se retrouve systématiquement planifié le samedi. Il vient vous voir, mécontent. Que faites-vous ?",
     choices: [
       {
         id: 'a',
-        label: "Je modifie manuellement le planning en ajoutant ses contraintes personnelles dans l'outil IA.",
+        title: "Faire confiance à l'IA",
+        label: "Vous approuvez le planning généré par l'IA sans modification et l'envoyez aux équipes.",
         profile: 'captain',
         points: 85,
         feedback:
@@ -47,7 +53,8 @@ const scenarios = [
       },
       {
         id: 'b',
-        label: "J'organise une réunion d'équipe pour co-construire les règles de planification à intégrer dans l'outil.",
+        title: "Ajuster manuellement",
+        label: "Vous vérifiez le planning et ajustez en fonction des contraintes individuelles que vous connaissez.",
         profile: 'explorer',
         points: 100,
         feedback:
@@ -55,7 +62,8 @@ const scenarios = [
       },
       {
         id: 'c',
-        label: "L'IA a été mise en place par le siège, ce n'est pas à moi de modifier ses décisions.",
+        title: "Demander à l'IA de refaire le planning",
+        label: "Vous partagez le planning avec l'équipe pour recueillir leurs retours avant validation.",
         profile: 'skeptic',
         points: 20,
         feedback:
@@ -65,12 +73,14 @@ const scenarios = [
   },
   {
     id: 'director-report',
-    title: 'Rapport au directeur',
+    title: 'Rapport au directeur :',
+    subtitle: 'vérifier avant d\'envoyer',
     context:
       "Votre directeur régional vous demande d'utiliser un outil IA qui génère automatiquement vos rapports de performance mensuels. Le rapport généré est globalement correct, mais vous remarquez une erreur : l'IA attribue la hausse des ventes bio à une promotion, alors que c'est le résultat d'une action locale que vous avez menée. Que faites-vous ?",
     choices: [
       {
         id: 'a',
+        title: "Corriger et enrichir le rapport",
         label: "Je corrige l'erreur, j'ajoute le contexte manquant et j'envoie le rapport en précisant mes modifications.",
         profile: 'captain',
         points: 90,
@@ -79,6 +89,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        title: "Signaler le bug au service IT",
         label: "Je renvoie le rapport tel quel en signalant l'erreur au service IT pour améliorer l'outil.",
         profile: 'explorer',
         points: 65,
@@ -87,6 +98,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        title: "Envoyer tel quel",
         label: "J'envoie le rapport tel quel. L'IA est plus fiable que moi pour analyser les chiffres.",
         profile: 'skeptic',
         points: 15,

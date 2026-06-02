@@ -66,6 +66,15 @@ function quizReducer(state, action) {
     case 'SHOW_RESULTS':
       return { ...state, currentPhase: 'result' };
 
+    case 'GO_HOME':
+      return {
+        ...state,
+        currentPhase: 'hook',
+        currentScenarioIndex: 0,
+        showFeedback: false,
+        lastChoice: null,
+      };
+
     case 'RESTART':
       return { ...initialState };
 
