@@ -10,7 +10,6 @@ function App() {
           <nav className="app-nav">
             <span className="app-nav-link">Formation</span>
             <span className="app-nav-link">Ressources</span>
-            <button className="app-nav-login">Login</button>
           </nav>
         </header>
         <main className="app-main">
