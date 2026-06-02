@@ -44,6 +44,7 @@ function quizReducer(state, action) {
           scenarioId: action.payload.scenarioId,
           choiceId: state.lastChoice.id,
           profile: state.lastChoice.profile,
+          points: state.lastChoice.points,
         },
       ];
       const nextIndex = state.currentScenarioIndex + 1;
@@ -58,6 +59,12 @@ function quizReducer(state, action) {
         currentPhase: isFinished ? 'result' : 'scenario',
       };
     }
+
+    case 'SHOW_RESOURCES':
+      return { ...state, currentPhase: 'resources' };
+
+    case 'SHOW_RESULTS':
+      return { ...state, currentPhase: 'result' };
 
     case 'RESTART':
       return { ...initialState };
