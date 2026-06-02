@@ -8,6 +8,7 @@ export default function GeneratorApp() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
 
   async function handleGenerate(e) {
     e.preventDefault();
@@ -40,10 +41,18 @@ export default function GeneratorApp() {
     link.click();
   }
 
+  function handleCopy() {
+    navigator.clipboard.writeText(result.quizUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
   function handleReset() {
     setResult(null);
     setNom('');
     setPrenom('');
+    setCopied(false);
   }
 
   return (
@@ -92,6 +101,18 @@ export default function GeneratorApp() {
             </div>
             <div style={styles.qrWrapper}>
               <img src={result.qrDataUrl} alt="QR Code" style={styles.qrImage} />
+            </div>
+            <div style={styles.copyRow}>
+              <input
+                style={styles.copyInput}
+                type="text"
+                readOnly
+                value={result.quizUrl}
+                onFocus={(e) => e.target.select()}
+              />
+              <button style={styles.copyBtn} onClick={handleCopy}>
+                {copied ? '✓ Copié' : 'Copier'}
+              </button>
             </div>
             <p style={styles.uidLabel}>
               ID : <code style={styles.uid}>{result.uid}</code>
@@ -253,5 +274,37 @@ const styles = {
     textAlign: 'center',
     lineHeight: '1.5',
     margin: 0,
+  },
+  copyRow: {
+    display: 'flex',
+    gap: '8px',
+    width: '100%',
+  },
+  copyInput: {
+    flex: 1,
+    padding: '9px 12px',
+    borderRadius: '8px',
+    border: '1.5px solid #e0e0e0',
+    fontSize: '12px',
+    color: '#555',
+    background: '#f9f9fb',
+    fontFamily: 'monospace',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    outline: 'none',
+    minWidth: 0,
+  },
+  copyBtn: {
+    padding: '9px 14px',
+    background: '#4347f3',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
   },
 };
