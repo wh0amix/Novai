@@ -57,6 +57,12 @@ function quizReducer(state, action) {
       };
     }
 
+    case 'SHOW_RESOURCES':
+      return { ...state, currentPhase: 'resources' };
+
+    case 'SHOW_RESULTS':
+      return { ...state, currentPhase: 'result' };
+
     case 'RESTART':
       return { ...initialState };
 

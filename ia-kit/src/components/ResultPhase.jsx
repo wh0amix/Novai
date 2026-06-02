@@ -48,7 +48,7 @@ const nextSteps = [
 ];
 
 export default function ResultPhase() {
-  const { userProfile } = useQuiz();
+  const { userProfile, showResources } = useQuiz();
 
   if (!userProfile) return null;
 
@@ -165,7 +165,7 @@ export default function ResultPhase() {
               <p className="result-action-desc">Outils et bonnes pratiques</p>
             </div>
           </div>
-          <button className="result-action-btn result-action-btn--red">
+          <button className="result-action-btn result-action-btn--red" onClick={showResources}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
               <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
