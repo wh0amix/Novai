@@ -4,9 +4,9 @@ const scenarios = [
     video: '/videos/Mise_en_situation_stock.mp4',
     title: 'Rupture de stock : ',
     subtitle: 'anticiper grâce aux données',
-    contextLabel: 'Retranscription voix off',
+    contextLabel: 'Retranscription',
     context:
-      "Voix off : Vous êtes manager du rayon frais. Un outil d'IA vous alerte sur un risque de rupture de stock sur les yaourts avant jeudi et vous recommande de commander automatiquement 200 unités. Mais vous savez qu'un élément important du terrain peut fausser cette recommandation : votre fournisseur habituel sera en grève la semaine prochaine. Cette information n'a pas forcément été intégrée par l'IA. Dans cette situation, quel est votre bon réflexe ?",
+      "Vous êtes manager du rayon frais. Un outil d'IA vous alerte sur un risque de rupture de stock sur les yaourts avant jeudi et vous recommande de commander automatiquement 200 unités. Mais vous savez qu'un élément important du terrain peut fausser cette recommandation : votre fournisseur habituel sera en grève la semaine prochaine. Cette information n'a pas forcément été intégrée par l'IA. Dans cette situation, quel est votre bon réflexe ?",
     choices: [
       {
         id: 'a',
