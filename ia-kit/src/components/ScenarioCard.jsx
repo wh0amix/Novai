@@ -2,6 +2,7 @@ import useQuiz from '../hooks/useQuiz';
 import ChoiceButton from './ChoiceButton';
 import Feedback from './Feedback';
 import ScenarioGamification from './ScenarioGamification';
+import scenarios from '../data/scenarios';
 
 const gamifiedScenarioIds = new Set([
   'sales-analysis-confidentiality',
@@ -10,13 +11,15 @@ const gamifiedScenarioIds = new Set([
 ]);
 
 export default function ScenarioCard({ scenario }) {
-  const { showFeedback, lastChoice, selectChoice, submitChoice, nextScenario } = useQuiz();
+  const { showFeedback, lastChoice, selectChoice, submitChoice, nextScenario, currentScenarioIndex } = useQuiz();
   const isGamifiedScenario = gamifiedScenarioIds.has(scenario.id);
+  const isLastScenario = currentScenarioIndex === scenarios.length - 1;
 
   if (showFeedback && lastChoice) {
     return (
       <Feedback
         choice={lastChoice}
+        isLast={isLastScenario}
         onNext={() => nextScenario(scenario.id)}
       />
     );

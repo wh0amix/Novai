@@ -17,7 +17,7 @@ const SCENARIO_LABELS = {
   'director-report': 'Rapport au directeur',
 };
 
-export async function sendResultsToHR({ profile, score, answers, userIdentity }) {
+export async function sendResultsToHR({ profile, score, answers, userIdentity, reviewCount = 0 }) {
   if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
     console.warn('[EmailJS] Variables d\'environnement manquantes — email ignoré.');
     return;
@@ -51,6 +51,7 @@ export async function sendResultsToHR({ profile, score, answers, userIdentity })
       date,
       answers_text:     answersText,
       scenarios_done:   `${answers.length} / 3`,
+      review_count:     `${reviewCount} retour(s) sur les choix`,
     },
     PUBLIC_KEY,
   );

@@ -6,7 +6,7 @@ const feedbackMeta = {
   0:   { title: "Mauvaise réponse",       icon: '⚠' },
 };
 
-export default function Feedback({ choice, onNext }) {
+export default function Feedback({ choice, onNext, isLast = false }) {
   const { reviewChoices } = useQuiz();
   const meta = feedbackMeta[choice.points] ?? feedbackMeta[0.5];
   const rawFeedback = choice.feedback ?? '';
@@ -53,7 +53,7 @@ export default function Feedback({ choice, onNext }) {
             </button>
           )}
           <button className="btn-next" onClick={onNext}>
-            Scénario suivant →
+            {isLast ? 'Découvrir mes résultats →' : 'Scénario suivant →'}
           </button>
         </div>
       </div>

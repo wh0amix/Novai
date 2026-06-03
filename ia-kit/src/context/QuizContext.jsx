@@ -10,6 +10,8 @@ const initialState = {
   showFeedback: false,
   lastChoice: null,
   userIdentity: null,
+  reviewCount: 0,
+  memoDownloaded: false,
 };
 
 function quizReducer(state, action) {
@@ -36,6 +38,7 @@ function quizReducer(state, action) {
       return {
         ...state,
         showFeedback: false,
+        reviewCount: state.reviewCount + 1,
       };
 
     case 'NEXT_SCENARIO': {
@@ -60,6 +63,9 @@ function quizReducer(state, action) {
         currentPhase: isFinished ? 'result' : 'scenario',
       };
     }
+
+    case 'DOWNLOAD_MEMO':
+      return { ...state, memoDownloaded: true };
 
     case 'SHOW_RESOURCES':
       return { ...state, currentPhase: 'resources' };
