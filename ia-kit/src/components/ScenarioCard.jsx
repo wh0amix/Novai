@@ -64,7 +64,7 @@ export default function ScenarioCard({ scenario }) {
           </svg>
         </div>
         <div>
-          <p className="scenario-context-label">{scenario.contextLabel ?? 'Contexte'}</p>
+
           <p className="scenario-context-text">{scenario.context}</p>
         </div>
       </div>
