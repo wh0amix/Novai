@@ -105,6 +105,7 @@ export default function ResultPhase() {
   if (!userProfile) return null;
 
   const { title, tagline, description, score } = userProfile;
+  const scoreColorClass = score >= 70 ? 'result-score-card--green' : score >= 40 ? 'result-score-card--orange' : 'result-score-card--red';
 
   if (!memoDownloaded) {
     return (
@@ -191,7 +192,7 @@ export default function ResultPhase() {
         </div>
 
         <div className="result-side-panel">
-          <div className="result-score-card">
+          <div className={`result-score-card ${scoreColorClass}`}>
             <strong className="result-score-main-value">{score}%</strong>
             <div className="result-score-line" aria-hidden="true" />
             <p className="result-score-main-label">Niveau de vigilance IA</p>
