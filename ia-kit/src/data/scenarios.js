@@ -1,11 +1,12 @@
 const scenarios = [
   {
     id: 'stock-shortage',
-    image: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=800&q=80',    
+    video: '/videos/Mise_en_situation_stock.mp4',
     title: 'Rupture de stock : ',
     subtitle: 'anticiper grâce aux données',
+    contextLabel: 'Retranscription voix off',
     context:
-      "Vous êtes manager du rayon frais. L'IA vous signale qu'il risque d'y avoir une rupture de stock sur les yaourts avant jeudi. Elle vous propose donc de commander automatiquement 200 unités pour éviter que le rayon soit vide. Mais vous savez aussi que le fournisseur habituel sera en grève la semaine prochaine. Cette information n'a pas forcément été prise en compte par l'IA. Que faites-vous ?",
+      "Voix off : Vous êtes manager du rayon frais. Un outil d'IA vous alerte sur un risque de rupture de stock sur les yaourts avant jeudi et vous recommande de commander automatiquement 200 unités. Mais vous savez qu'un élément important du terrain peut fausser cette recommandation : votre fournisseur habituel sera en grève la semaine prochaine. Cette information n'a pas forcément été intégrée par l'IA. Dans cette situation, quel est votre bon réflexe ?",
     choices: [
       {
         id: 'a',

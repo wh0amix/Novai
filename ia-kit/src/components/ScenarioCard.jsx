@@ -16,7 +16,20 @@ export default function ScenarioCard({ scenario }) {
 
   return (
     <article className="scenario-card" aria-label={`Scénario : ${scenario.title}`}>
-      {scenario.image && (
+      {scenario.video && (
+        <div className="scenario-image-container scenario-media-container">
+          <video
+            src={scenario.video}
+            className="scenario-video"
+            controls
+            preload="metadata"
+          >
+            Votre navigateur ne prend pas en charge la lecture vidéo.
+          </video>
+        </div>
+      )}
+
+      {!scenario.video && scenario.image && (
         <div className="scenario-image-container">
           <img
             src={scenario.image}
@@ -43,7 +56,7 @@ export default function ScenarioCard({ scenario }) {
           </svg>
         </div>
         <div>
-          <p className="scenario-context-label">Contexte</p>
+          <p className="scenario-context-label">{scenario.contextLabel ?? 'Contexte'}</p>
           <p className="scenario-context-text">{scenario.context}</p>
         </div>
       </div>
