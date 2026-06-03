@@ -131,7 +131,7 @@ const docs = [
   {
     title: "Charte d'utilisation de l'IA en entreprise",
     desc: "Document interne à consulter",
-    url: "https://www.cnil.fr/fr/intelligence-artificielle/charte",
+    url: "https://www.insp.gouv.fr/files/files/actualites/2025-09/ia_agents-avec_compression.pdf",
   },
   {
     title: "Support IA : aide et questions",
