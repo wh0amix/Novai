@@ -236,7 +236,7 @@ body {
   flex: 1;
   display: flex;
   justify-content: center;
-  padding: 2rem 2rem;
+  padding: 50px 2rem 2rem;
 }
 
 .phase {
@@ -2017,8 +2017,8 @@ body {
 }
 
 @media (min-width: 640px) {
-  .app-main { 
-    padding: 1.25rem 2rem 2.5rem; 
+  .app-main {
+    padding: 50px 2rem 2.5rem;
   }
   .scenario-title { font-size: 2.15rem; }
 }
