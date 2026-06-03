@@ -29,7 +29,7 @@ export default function ScenarioCard({ scenario }) {
 
       <h2 className="scenario-title">
         {scenario.title}
-        {scenario.subtitle && <><br /><span className="scenario-subtitle">{scenario.subtitle}</span></>}
+        {scenario.subtitle && <span className="scenario-subtitle">{scenario.subtitle}</span>}
       </h2>
 
       <div className="scenario-context-card">

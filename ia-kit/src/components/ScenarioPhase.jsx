@@ -8,13 +8,14 @@ export default function ScenarioPhase() {
   return (
     <section className="phase scenario-phase" aria-label="Scénario en cours">
       <div className="progress-container" aria-label={`Progression: ${progress.current} sur ${progress.total} scénarios`}>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
-        </div>
         <span className="progress-text">
           Scénario {progress.current} / {progress.total}
         </span>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
+        </div>
       </div>
+      
       <ScenarioCard scenario={currentScenario} />
     </section>
   );

@@ -1,14 +1,15 @@
 const scenarios = [
   {
     id: 'stock-shortage',
-    // Image : Rayons de supermarché avec des espaces vides (gestion des stocks)
-    image: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=800&q=80',    title: 'Rupture de stock :',
+    image: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=800&q=80',    
+    title: 'Rupture de stock : ',
     subtitle: 'anticiper grâce aux données',
     context:
       "Vous êtes manager du rayon frais. L'IA vous signale qu'il risque d'y avoir une rupture de stock sur les yaourts avant jeudi. Elle vous propose donc de commander automatiquement 200 unités pour éviter que le rayon soit vide. Mais vous savez aussi que le fournisseur habituel sera en grève la semaine prochaine. Cette information n'a pas forcément été prise en compte par l'IA. Que faites-vous ?",
     choices: [
       {
         id: 'a',
+        profile: 'explorer',
         title: "Je valide la commande, l'IA a les données",
         label: "Je valide la commande, l'IA a les données.",
         points: 0,
@@ -17,6 +18,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'skeptic',
         title: "J'ignore la recommandation et je gère comme d'habitude",
         label: "J'ignore la recommandation et je gère comme d'habitude.",
         points: 0.5,
@@ -25,6 +27,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'captain',
         title: "Je vérifie d'abord les infos fournisseur",
         label: "Je vérifie d'abord les informations fournisseur.",
         points: 1,
@@ -35,15 +38,15 @@ const scenarios = [
   },
   {
     id: 'team-planning',
-    // Image : Agenda/planning en cours de modification avec un café
     image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80',
-    title: "Planning d'équipe :",
+    title: "Planning d'équipe : ",
     subtitle: "l'humain avant l'algorithme",
     context:
       "L'IA vous propose un planning d'équipe en quelques secondes. À première vue, tout semble bien organisé : les horaires sont équilibrés et les besoins du magasin sont couverts. Mais vous voyez que Sophie est placée en fermeture vendredi soir. Pourtant, vous savez qu'elle ne peut pas être là ce soir-là, car elle vous l'avait déjà signalé. Quel est votre premier réflexe face à cette proposition ?",
     choices: [
       {
         id: 'a',
+        profile: 'explorer',
         title: "Je publie le planning tel quel",
         label: "Je publie le planning tel quel.",
         points: 0,
@@ -52,6 +55,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'skeptic',
         title: "Je modifie manuellement le créneau de Sophie",
         label: "Je modifie manuellement le créneau de Sophie.",
         points: 0.5,
@@ -60,6 +64,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'captain',
         title: "Je demande à l'IA de refaire le planning avec la contrainte de Sophie",
         label: "Je demande à l'IA de refaire le planning avec la contrainte de Sophie.",
         points: 1,
@@ -70,15 +75,15 @@ const scenarios = [
   },
   {
     id: 'director-report',
-    // Image : Ordinateur, graphiques financiers et analyse de données
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Rapport au directeur :',
+    title: 'Rapport au directeur : ',
     subtitle: 'vérifier avant d\'envoyer',
     context:
       "Votre directeur attend un rapport à 10h. Pour gagner du temps, vous utilisez l'IA afin de mettre en forme les chiffres de vente et rédiger une première version. L'IA indique une baisse de 12 % par rapport à l'année dernière. Le chiffre est bon, mais il manque une information importante : l'année dernière, il y avait eu une opération commerciale exceptionnelle qui avait fortement augmenté les ventes. Sans cette précision, le rapport peut donner une mauvaise impression. Que faites-vous ?",
     choices: [
       {
         id: 'a',
+        profile: 'explorer',
         title: "J'envoie le rapport tel quel",
         label: "J'envoie le rapport tel quel.",
         points: 0,
@@ -87,6 +92,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'skeptic',
         title: "Je réécris tout le rapport moi-même",
         label: "Je réécris tout le rapport moi-même.",
         points: 0.5,
@@ -95,6 +101,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'captain',
         title: "Je garde la base de l'IA et j'ajoute le contexte moi-même",
         label: "Je garde la base de l'IA et j'ajoute le contexte moi-même.",
         points: 1,
@@ -105,15 +112,15 @@ const scenarios = [
   },
   {
     id: 'sales-analysis-confidentiality',
-    // Image : Cadenas numérique/protection des données
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-    title: 'Analyse des ventes et confidentialité :',
+    title: 'Analyse des ventes et confidentialité : ',
     subtitle: 'protéger les données stratégiques',
     context:
       "Vous êtes responsable du rayon frais et vous devez analyser les mauvaises performances du dernier trimestre. Pour gagner du temps, vous décidez d'utiliser une IA grand public (comme ChatGPT ou Claude) pour dégager des tendances. Vous disposez d'un fichier Excel brut qui contient les volumes de ventes, mais aussi les noms de vos fournisseurs locaux, vos marges commerciales exactes et les identifiants de vos employés. Comment procédez-vous avec ce fichier ?",
     choices: [
       {
         id: 'a',
+        profile: 'captain',
         title: "Je nettoie d'abord le fichier",
         label: "Je nettoie d'abord le fichier (supprimer marges, noms, identifiants).",
         points: 1,
@@ -122,6 +129,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'skeptic',
         title: "Je n'utilise pas l'IA pour ça",
         label: "Je n'utilise pas l'IA pour ça (trop de risques).",
         points: 0.5,
@@ -130,6 +138,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'explorer',
         title: "Je donne le fichier Excel tel quel à l'IA",
         label: "Je donne le fichier Excel tel quel à l'IA.",
         points: 0,
@@ -140,15 +149,15 @@ const scenarios = [
   },
   {
     id: 'hr-data-confidentiality',
-    // Image : Entretien RH / Dossiers confidentiels
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Données RH et confidentialité :',
+    title: 'Données RH et confidentialité : ',
     subtitle: 'anonymiser avant de partager',
     context:
       "Vous souhaitez demander à une IA de vous aider à préparer les entretiens annuels de votre équipe. Pour cela, vous envisagez de copier les évaluations individuelles des collaborateurs, avec leurs noms et commentaires. Quel comportement devriez-vous privilégier ?",
     choices: [
       {
         id: 'a',
+        profile: 'skeptic',
         title: "Je n'utilise pas l'IA",
         label: "Je n'utilise pas l'IA (trop de risques RH).",
         points: 0.5,
@@ -157,6 +166,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'explorer',
         title: "Je copie toutes les informations dans l'outil",
         label: "Je copie toutes les informations dans l'outil.",
         points: 0,
@@ -165,6 +175,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'captain',
         title: "J'anonymise les informations et je respecte les règles internes",
         label: "J'anonymise les informations et je respecte les règles internes.",
         points: 1,
@@ -175,15 +186,15 @@ const scenarios = [
   },
   {
     id: 'product-assortment',
-    // Image : Beau rayon frais de supermarché bien achalandé
     image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Proposition d\'assortiment rayon :',
+    title: 'Proposition d\'assortiment rayon : ',
     subtitle: 'équilibrer données et contexte',
     context:
       "L'IA analyse les ventes du rayon et vous recommande de retirer plusieurs références de produits régionaux qui se vendent moins que les autres. À la place, elle propose d'augmenter les produits à forte rotation pour optimiser les ventes. Cependant, vous savez que les produits régionaux sont particulièrement appréciés par vos clients et contribuent à l'image du magasin. Comment réagissez-vous à cette recommandation ?",
     choices: [
       {
         id: 'a',
+        profile: 'explorer',
         title: "J'applique la recommandation de l'IA telle quelle",
         label: "J'applique la recommandation de l'IA telle quelle.",
         points: 0,
@@ -192,6 +203,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'captain',
         title: "J'analyse la recommandation et j'adapte l'assortiment",
         label: "J'analyse la recommandation et j'adapte l'assortiment.",
         points: 1,
@@ -200,6 +212,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'skeptic',
         title: "Je conserve l'assortiment actuel sans tenir compte de l'analyse",
         label: "Je conserve l'assortiment actuel sans tenir compte de l'analyse.",
         points: 0.5,
@@ -210,15 +223,15 @@ const scenarios = [
   },
   {
     id: 'promo-team-brief',
-    // Image : Réunion d'équipe debout / Briefing
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Brief d\'équipe avant opération promo :',
+    title: 'Brief d\'équipe avant opération promo : ',
     subtitle: 'adapter l\'IA à la réalité terrain',
     context:
       "Une grosse opération promotionnelle commence le lendemain. Le manager utilise l'IA pour préparer un brief d'équipe clair et rapide. L'IA propose un brief bien structuré, mais oublie certaines contraintes du magasin : manque de personnel, livraison en retard et rayon à réorganiser. Comment utilisez-vous le brief proposé par l'IA ?",
     choices: [
       {
         id: 'a',
+        profile: 'captain',
         title: "Je complète le brief avec les contraintes du magasin",
         label: "Je complète le brief avec les contraintes du magasin avant de le présenter.",
         points: 1,
@@ -227,6 +240,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'explorer',
         title: "Je l'utilise tel quel (le brief est très clair)",
         label: "Je l'utilise tel quel (le brief est très clair).",
         points: 0,
@@ -235,6 +249,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'skeptic',
         title: "Je le refais entièrement moi-même",
         label: "Je le refais entièrement moi-même.",
         points: 0.5,
@@ -245,15 +260,15 @@ const scenarios = [
   },
   {
     id: 'daily-task-prioritization',
-    // Image : Vue d'un supermarché très fréquenté / Caisses
     image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Priorisation des tâches en journée chargée :',
+    title: 'Priorisation des tâches en journée chargée : ',
     subtitle: 'rester maître de l\'urgence',
     context:
       "Le magasin est en sous-effectif et l'activité est intense. Vous demandez à l'IA de vous aider à organiser les priorités de la journée. L'IA propose une liste bien structurée et recommande de commencer par la mise à jour de l'affichage promotionnel. Au même moment, plusieurs caisses sont saturées et une file d'attente importante commence à se former. Quelle décision prenez-vous face à cette situation ?",
     choices: [
       {
         id: 'a',
+        profile: 'skeptic',
         title: "J'ignore complètement la proposition de l'IA",
         label: "J'ignore complètement la proposition de l'IA et je gère comme d'habitude.",
         points: 0.5,
@@ -262,6 +277,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'captain',
         title: "Je traite d'abord l'affluence en caisse puis j'ajuste les priorités",
         label: "Je traite d'abord l'affluence en caisse puis j'ajuste les priorités de l'IA.",
         points: 1,
@@ -270,6 +286,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'explorer',
         title: "Je suis l'ordre de priorité proposé par l'IA",
         label: "Je suis l'ordre de priorité proposé par l'IA.",
         points: 0,
@@ -280,7 +297,6 @@ const scenarios = [
   },
   {
     id: 'internal-communication',
-    // Image : Écran de smartphone avec des messages / Communication pro
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
     title: 'Communication interne rédigée par l\'IA :',
     subtitle: 'valider le fond avant la forme',
@@ -289,6 +305,7 @@ const scenarios = [
     choices: [
       {
         id: 'a',
+        profile: 'captain',
         title: "Je vérifie la consigne avec la procédure officielle",
         label: "Je vérifie la consigne avec la procédure officielle avant de la transmettre.",
         points: 1,
@@ -297,6 +314,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'skeptic',
         title: "Je modifie seulement la tournure du message",
         label: "Je modifie seulement la tournure du message, sans vérifier le fond.",
         points: 0.5,
@@ -305,6 +323,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'explorer',
         title: "J'envoie le message tel quel",
         label: "J'envoie le message tel quel (car l'IA a déjà formulé une version claire).",
         points: 0,
@@ -315,15 +334,15 @@ const scenarios = [
   },
   {
     id: 'onboarding-new-hire',
-    // Image : Poignée de main / Accueil d'un collaborateur
     image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Accueil d\'un nouvel arrivant :',
+    title: 'Accueil d\'un nouvel arrivant : ',
     subtitle: 'l\'humain complète l\'IA',
     context:
       "Un nouvel arrivant rejoint votre équipe en période de forte activité. Vous manquez de temps pour lui expliquer en détail le fonctionnement du rayon. Vous demandez à l'IA de générer un parcours d'accueil ultra rapide, avec une liste de tâches simples. L'IA propose de le laisser pratiquement en autonomie dès le deuxième jour, car le planning est serré. Mais vous voyez qu'il est encore perdu, qu'il n'a pas intégré les priorités du rayon et qu'il hésite à poser des questions. Quelle attitude adoptez-vous face à la situation ?",
     choices: [
       {
         id: 'a',
+        profile: 'explorer',
         title: "Je laisse suivre le parcours seul",
         label: "Je laisse le nouvel arrivant suivre seul le parcours proposé par l'IA.",
         points: 0,
@@ -332,6 +351,7 @@ const scenarios = [
       },
       {
         id: 'b',
+        profile: 'captain',
         title: "Je garde la base mais l'accompagne",
         label: "Je garde la base de l'IA comme base, mais je reste présent pour l'accompagner.",
         points: 1,
@@ -340,6 +360,7 @@ const scenarios = [
       },
       {
         id: 'c',
+        profile: 'skeptic',
         title: "Je reprends entièrement l'accueil",
         label: "J'abandonne la proposition de l'IA et je reprends entièrement l'accueil.",
         points: 0.5,
