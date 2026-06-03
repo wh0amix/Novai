@@ -3,6 +3,7 @@ import useQuiz from '../hooks/useQuiz';
 import { sendResultsToHR } from '../services/email';
 import scenarios from '../data/scenarios';
 
+
 const totalScenarios = scenarios.length;
 const getProfileContent = (profileKey) => {
   const profileContent = {
@@ -79,14 +80,22 @@ const nextSteps = [
 ];
 
 export default function ResultPhase() {
-  const { userProfile, answers, showResources, userIdentity } = useQuiz();
+  const { userProfile, answers, showResources, userIdentity, reviewCount, memoDownloaded, downloadMemo } = useQuiz();
   const emailSentRef = useRef(false);
+
+  function handleMemoDownload() {
+    const link = document.createElement('a');
+    link.href = '/MEMO.pdf';
+    link.download = 'Mémo-Formation-IA.pdf';
+    link.click();
+    downloadMemo();
+  }
 
   useEffect(() => {
     if (!userProfile || emailSentRef.current) return;
     emailSentRef.current = true;
 
-    sendResultsToHR({ profile: userProfile, score: userProfile.score, answers, userIdentity })
+    sendResultsToHR({ profile: userProfile, score: userProfile.score, answers, userIdentity, reviewCount })
       .then((res) => {
         if (!res?.skipped) console.info('[Brevo] Email RH envoyé avec succès.');
       })
@@ -97,6 +106,36 @@ export default function ResultPhase() {
 
   const { title, tagline, description, score } = userProfile;
 
+  if (!memoDownloaded) {
+    return (
+      <section className="result-phase phase" aria-label="Téléchargement du mémo">
+        <div className="result-hero">
+          <h2 className="result-title">Formation terminée !</h2>
+          <p className="result-subtitle">
+            Vous avez complété les {totalScenarios} scénarios de sensibilisation à l'IA
+          </p>
+        </div>
+
+        <div className="result-memo-gate">
+          <div className="result-memo-gate-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4347f3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <h3 className="result-memo-gate-title">Téléchargez votre mémo de formation</h3>
+          <p className="result-memo-gate-desc">
+            Votre mémo personnalisé récapitule les bonnes pratiques IA à retenir. Téléchargez-le pour accéder à vos résultats.
+          </p>
+          <button className="result-memo-gate-btn" onClick={handleMemoDownload}>
+            Télécharger le mémo PDF
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="result-phase phase" aria-label="Votre bilan">
 
@@ -106,6 +145,21 @@ export default function ResultPhase() {
           Vous avez complété les {totalScenarios} scénarios de sensibilisation à l'IA
         </p>
       </div>
+
+      {reviewCount >= 3 && (
+        <div className="result-review-warning" role="alert" aria-live="polite">
+          <div className="result-review-warning-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <strong>Attention :</strong> vous avez consulté les choix {reviewCount} fois pendant la formation. Cela peut indiquer une difficulté à identifier les bonnes pratiques IA — pensez à relire les ressources disponibles.
+          </div>
+        </div>
+      )}
 
       <div className="result-overview-grid">
         <div className="result-profile-panel">
@@ -142,6 +196,15 @@ export default function ResultPhase() {
             <div className="result-score-line" aria-hidden="true" />
             <p className="result-score-main-label">Niveau de vigilance IA</p>
             <p className="result-score-main-desc">{description}</p>
+            <div className="result-score-review-stat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              {reviewCount === 0
+                ? 'Aucun retour sur les choix'
+                : `${reviewCount} retour${reviewCount > 1 ? 's' : ''} vers les choix`}
+            </div>
           </div>
 
           <div className="result-side-actions">
@@ -159,8 +222,8 @@ export default function ResultPhase() {
                   <p className="result-action-desc">Téléchargez le résumé en PDF</p>
                 </div>
               </div>
-              <button className="result-action-btn result-action-btn--blue">
-                Télécharger le mémo
+              <button className="result-action-btn result-action-btn--blue" onClick={handleMemoDownload}>
+                Télécharger le mémo PDF
               </button>
             </div>
 
