@@ -15,7 +15,6 @@ export default function ChoiceButton({ choice, index, isSelected, onSelect }) {
       </span>
       <span className="choice-content">
         {choice.title && <span className="choice-title">{choice.title}</span>}
-        <span className="choice-description">{choice.label}</span>
       </span>
     </button>
   );
