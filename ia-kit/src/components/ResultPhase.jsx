@@ -91,7 +91,7 @@ export default function ResultPhase() {
         if (!res?.skipped) console.info('[Brevo] Email RH envoyé avec succès.');
       })
       .catch((err) => console.error('[Brevo] Échec envoi email :', err.message));
-  }, [userProfile, answers]);
+  }, [userProfile, answers, userIdentity]);
 
   if (!userProfile) return null;
 

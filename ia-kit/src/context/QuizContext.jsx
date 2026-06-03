@@ -1,9 +1,7 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import { verifyIdentityToken } from '../services/token';
 import scenarios from '../data/scenarios';
-
-const QuizContext = createContext(null);
-const QuizDispatchContext = createContext(null);
+import { QuizContext, QuizDispatchContext } from './quizContexts';
 
 const initialState = {
   currentPhase: 'hook',
@@ -108,12 +106,4 @@ export function AppProvider({ children }) {
       </QuizDispatchContext.Provider>
     </QuizContext.Provider>
   );
-}
-
-export function useQuizState() {
-  return useContext(QuizContext);
-}
-
-export function useQuizDispatch() {
-  return useContext(QuizDispatchContext);
 }

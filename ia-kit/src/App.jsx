@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { AppProvider, useQuizDispatch, useQuizState } from './context/QuizContext';
+import { AppProvider } from './context/QuizContext';
+import { useQuizDispatch } from './context/useQuizContext';
 import PhaseRouter from './components/PhaseRouter';
 
 function Header() {
   const dispatch = useQuizDispatch();
-  const { answers } = useQuizState();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const goHome = () => dispatch({ type: 'GO_HOME' });
@@ -16,8 +16,6 @@ function Header() {
     dispatch({ type: 'RESTART' });
     setMenuOpen(false);
   };
-
-  const hasResults = answers.length > 0;
 
   return (
     <header className="app-header">

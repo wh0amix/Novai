@@ -1,6 +1,6 @@
 import scenarios from '../data/scenarios';
 import profiles from '../data/profiles';
-import { useQuizState, useQuizDispatch } from '../context/QuizContext';
+import { useQuizState, useQuizDispatch } from '../context/useQuizContext';
 
 export default function useQuiz() {
   const state = useQuizState();
