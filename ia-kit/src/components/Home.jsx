@@ -50,7 +50,7 @@ export default function Home() {
         </button>
 
         <p className="hook-footer">
-          3 mises en situation · Aucune inscription · Propulsé par NOVAÏ
+          L'IA au service de l'humain· Propulsé par NOVAÏ
         </p>
       </div>
     </section>

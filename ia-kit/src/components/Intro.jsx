@@ -40,7 +40,7 @@ export default function Intro() {
 
           <div className="intro-mission">
             <p>
-              <strong>Votre mission :</strong> Traverser 3 situations réalistes et découvrir comment utiliser l'IA de manière responsable et efficace.
+              <strong>Votre mission :</strong> Traverser des situations réalistes et découvrir comment utiliser l'IA de manière responsable et efficace.
             </p>
           </div>
 

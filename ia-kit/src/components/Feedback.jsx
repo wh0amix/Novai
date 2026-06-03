@@ -9,6 +9,10 @@ const feedbackMeta = {
 export default function Feedback({ choice, onNext }) {
   const { reviewChoices } = useQuiz();
   const meta = feedbackMeta[choice.points] ?? feedbackMeta[0.5];
+  const rawFeedback = choice.feedback ?? '';
+  const feedbackParts = rawFeedback.split(/À retenir\s*:\s*/i);
+  const feedbackText = (feedbackParts[0] ?? rawFeedback).trim();
+  const takeawayText = (choice.takeaway ?? feedbackParts[1] ?? '').trim();
   
   let cardClass = 'feedback-card';
   let iconClass = 'feedback-icon';
@@ -35,10 +39,11 @@ export default function Feedback({ choice, onNext }) {
           <h3 className="feedback-title">{meta.title}</h3>
         </div>
 
-        <p className="feedback-body">{choice.feedback}</p>
+        <p className="feedback-body">{feedbackText}</p>
 
         <div className="feedback-tip">
-          <strong>À retenir :</strong> {choice.feedback}
+          <strong>À retenir :</strong>{' '}
+          {takeawayText || "Appliquez cette logique dans vos prochaines décisions terrain."}
         </div>
 
         <div className="feedback-actions">
