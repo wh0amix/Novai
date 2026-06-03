@@ -1,9 +1,17 @@
 import useQuiz from '../hooks/useQuiz';
 import ChoiceButton from './ChoiceButton';
 import Feedback from './Feedback';
+import ScenarioGamification from './ScenarioGamification';
+
+const gamifiedScenarioIds = new Set([
+  'sales-analysis-confidentiality',
+  'hr-data-confidentiality',
+  'promo-team-brief',
+]);
 
 export default function ScenarioCard({ scenario }) {
   const { showFeedback, lastChoice, selectChoice, submitChoice, nextScenario } = useQuiz();
+  const isGamifiedScenario = gamifiedScenarioIds.has(scenario.id);
 
   if (showFeedback && lastChoice) {
     return (
@@ -63,17 +71,25 @@ export default function ScenarioCard({ scenario }) {
 
       <p className="scenario-question">Comment gérez-vous cette situation ?</p>
 
-      <div className="choices" role="group" aria-label="Vos choix">
-        {scenario.choices.map((choice, index) => (
-          <ChoiceButton
-            key={choice.id}
-            choice={choice}
-            index={index}
-            isSelected={lastChoice?.id === choice.id}
-            onSelect={selectChoice}
-          />
-        ))}
-      </div>
+      {isGamifiedScenario ? (
+        <ScenarioGamification
+          scenario={scenario}
+          lastChoice={lastChoice}
+          onSelect={selectChoice}
+        />
+      ) : (
+        <div className="choices" role="group" aria-label="Vos choix">
+          {scenario.choices.map((choice, index) => (
+            <ChoiceButton
+              key={choice.id}
+              choice={choice}
+              index={index}
+              isSelected={lastChoice?.id === choice.id}
+              onSelect={selectChoice}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="scenario-actions">
         <button
