@@ -236,7 +236,7 @@ body {
   flex: 1;
   display: flex;
   justify-content: center;
-  padding: 2rem 2rem;
+  padding: 50px 2rem 2rem;
 }
 
 .phase {
@@ -498,6 +498,7 @@ body {
 }
 
 .intro-cta {
+  position: relative;
   width: 100%;
   background: var(--gradient-brand);
   color: white;
@@ -508,11 +509,26 @@ body {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 14px rgba(67,71,243,0.25);
+  overflow: hidden;
+  z-index: 0;
+}
+.intro-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(227deg, #8e00fa 0%, #4347f3 100%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
+}
+.intro-cta:hover::after {
+  opacity: 1;
 }
 .intro-cta:hover {
-  box-shadow: 0 6px 18px rgba(67,71,243,0.4);
+  box-shadow: 0 6px 18px rgba(142,0,250,0.35);
   transform: translateY(-1px);
 }
 
@@ -2017,8 +2033,8 @@ body {
 }
 
 @media (min-width: 640px) {
-  .app-main { 
-    padding: 1.25rem 2rem 2.5rem; 
+  .app-main {
+    padding: 50px 2rem 2.5rem;
   }
   .scenario-title { font-size: 2.15rem; }
 }

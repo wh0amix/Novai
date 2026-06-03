@@ -27,7 +27,7 @@ export default function Intro() {
           </h2>
 
           <p className="intro-text">
-            Vous êtes manager dans une grande surface. Chaque jour, vous prenez des décisions qui impactent vos équipes, vos stocks, vos clients.
+            Vous êtes manager dans la gande distribution. Chaque jour, vous prenez des décisions qui impactent vos équipes, vos stocks, vos clients.
           </p>
 
           <p className="intro-text">
