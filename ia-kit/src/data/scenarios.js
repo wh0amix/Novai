@@ -150,7 +150,7 @@ const scenarios = [
   },
   {
     id: 'hr-data-confidentiality',
-    image: '/resume-genius-72D3z_LfrQA-unsplash.jpg',
+    image: '/image-rh.webp',
     title: 'Données RH et confidentialité : ',
     subtitle: 'anonymiser avant de partager',
     context:
