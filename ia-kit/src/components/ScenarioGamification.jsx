@@ -9,17 +9,20 @@ const confidentialDataCards = [
 ];
 
 const hrFields = [
-  { id: 'first-last-name', label: 'Nom et prénom', sensitive: true },
-  { id: 'position', label: 'Poste occupé', sensitive: false },
-  { id: 'year-review', label: 'Commentaire annuel', sensitive: true },
-  { id: 'strengths', label: 'Points forts', sensitive: false },
-  { id: 'personal-note', label: 'Observation manager', sensitive: true },
+  { id: 'first-last-name', label: 'Nom et prénom', value: 'Sophie Martin', sensitive: true },
+  { id: 'position', label: 'Poste occupé', value: 'Responsable caisse', sensitive: false },
+  { id: 'year-review', label: 'Évaluation annuelle', value: 'Atteint 92% des objectifs, besoin de coaching sur le closing', sensitive: true },
+  { id: 'strengths', label: 'Points forts', value: 'Organisation, relation client, réactivité', sensitive: false },
+  { id: 'personal-note', label: 'Note manager', value: 'Souhaite évoluer vers un poste adjoint en 2026', sensitive: true },
 ];
 
-const promoConstraints = [
-  { id: 'staffing', label: 'Équipe réduite' },
-  { id: 'delivery', label: 'Livraison en retard' },
-  { id: 'layout', label: 'Rayon à réorganiser' },
+const promoInfoOptions = [
+  { id: 'staffing', label: 'Équipe réduite', important: true },
+  { id: 'delivery', label: 'Livraison en retard', important: true },
+  { id: 'layout', label: 'Rayon à réorganiser', important: true },
+  { id: 'playlist', label: 'Changer la playlist du magasin', important: false },
+  { id: 'photo', label: 'Prévoir une photo vitrine en fin de journée', important: false },
+  { id: 'coffee', label: 'Organiser une pause café debrief à 16h', important: false },
 ];
 
 function getChoiceById(scenario, choiceId) {
@@ -40,28 +43,72 @@ function DecisionBanner({ choice }) {
 function Scenario4Game({ scenario, lastChoice, onSelect }) {
   const [zones, setZones] = useState({ deck: confidentialDataCards, safe: [], shred: [] });
   const [draggedId, setDraggedId] = useState(null);
+  const totalCards = confidentialDataCards.length;
   const allPlaced = zones.deck.length === 0;
+  const allInDeck = zones.deck.length === totalCards;
+  const allInShred = zones.shred.length === totalCards;
   const safeIsCorrect = zones.safe.every((item) => item.kind === 'safe');
   const shredIsCorrect = zones.shred.every((item) => item.kind === 'secret');
   const hasAllSafe = zones.safe.filter((item) => item.kind === 'safe').length === 2;
   const hasAllSecret = zones.shred.filter((item) => item.kind === 'secret').length === 3;
   const isCorrectSort = allPlaced && safeIsCorrect && shredIsCorrect && hasAllSafe && hasAllSecret;
 
+  const inferredChoiceId = useMemo(() => {
+    if (isCorrectSort) return 'a';
+    if (allInShred) return 'b';
+    if (allInDeck) return 'c';
+    return null;
+  }, [allInDeck, allInShred, isCorrectSort]);
+
+  const boardEntries = useMemo(() => {
+    const zoneLabels = {
+      deck: 'Fichier brut',
+      safe: 'Dossier IA sécurisé',
+      shred: 'Broyeur documents',
+    };
+
+    return ['deck', 'safe', 'shred'].flatMap((zoneKey) => (
+      zones[zoneKey].map((card) => ({
+        id: card.id,
+        label: card.label,
+        kind: card.kind,
+        zone: zoneKey,
+        zoneLabel: zoneLabels[zoneKey],
+      }))
+    ));
+  }, [zones]);
+
   useEffect(() => {
-    if (!isCorrectSort || lastChoice?.id === 'a') return;
-    const choice = getChoiceById(scenario, 'a');
-    if (choice) onSelect(choice);
-  }, [isCorrectSort, lastChoice?.id, onSelect, scenario]);
+    if (!inferredChoiceId) return;
+    const choice = getChoiceById(scenario, inferredChoiceId);
+    if (!choice) return;
+
+    onSelect({
+      ...choice,
+      gameMeta: {
+        scenarioId: scenario.id,
+        boardEntries,
+      },
+    });
+  }, [boardEntries, inferredChoiceId, onSelect, scenario]);
 
   const status = useMemo(() => {
-    if (!allPlaced) return 'Faites glisser les données dans le bon espace.';
+    if (allInDeck) {
+      return 'Tous les éléments sont restés dans le fichier brut : cela correspond à un envoi tel quel à l\'IA.';
+    }
+
+    if (allInShred) {
+      return 'Tous les éléments sont au broyeur : cela correspond à ne pas utiliser l\'IA.';
+    }
 
     if (isCorrectSort) {
       return 'Le fichier est prêt à être transmis à l\'IA.';
     }
 
-    return 'Le tri est incomplet ou incorrect : révisez les données sensibles.';
-  }, [allPlaced, isCorrectSort]);
+    if (!allPlaced) return 'Faites glisser les données dans le bon espace.';
+
+    return 'Tri intermédiaire : continuez à organiser les données pour valider votre décision.';
+  }, [allInDeck, allInShred, allPlaced, isCorrectSort]);
 
   function moveCard(cardId, targetZone) {
     let movedCard = null;
@@ -144,15 +191,6 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
 
       <p className="game-status">{status}</p>
 
-      <div className="game-actions-row">
-        <button type="button" className="game-alt-btn" onClick={() => onSelect(getChoiceById(scenario, 'b'))}>
-          Je n'utilise pas l'IA
-        </button>
-        <button type="button" className="game-alt-btn game-alt-btn--danger" onClick={() => onSelect(getChoiceById(scenario, 'c'))}>
-          Envoyer le fichier brut
-        </button>
-      </div>
-
       <DecisionBanner choice={lastChoice} />
     </div>
   );
@@ -161,9 +199,41 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
 function Scenario5Game({ scenario, lastChoice, onSelect }) {
   const [redactedIds, setRedactedIds] = useState([]);
 
-  const allSensitiveRedacted = hrFields
-    .filter((field) => field.sensitive)
-    .every((field) => redactedIds.includes(field.id));
+  const sensitiveIds = hrFields.filter((field) => field.sensitive).map((field) => field.id);
+  const allSensitiveRedacted = sensitiveIds.every((id) => redactedIds.includes(id));
+  const allFieldsRedacted = redactedIds.length === hrFields.length;
+  const noFieldRedacted = redactedIds.length === 0;
+  const onlySensitiveRedacted = allSensitiveRedacted && !allFieldsRedacted && redactedIds.length === sensitiveIds.length;
+
+  const inferredChoiceId = useMemo(() => {
+    if (onlySensitiveRedacted) return 'c';
+    if (allFieldsRedacted) return 'a';
+    if (noFieldRedacted) return 'b';
+    return null;
+  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted]);
+
+  const redactionEntries = useMemo(() => (
+    hrFields.map((field) => ({
+      id: field.id,
+      label: field.label,
+      sensitive: field.sensitive,
+      redacted: redactedIds.includes(field.id),
+    }))
+  ), [redactedIds]);
+
+  useEffect(() => {
+    if (!inferredChoiceId) return;
+    const choice = getChoiceById(scenario, inferredChoiceId);
+    if (!choice) return;
+
+    onSelect({
+      ...choice,
+      gameMeta: {
+        scenarioId: scenario.id,
+        redactionEntries,
+      },
+    });
+  }, [inferredChoiceId, onSelect, redactionEntries, scenario]);
 
   function toggleField(fieldId) {
     setRedactedIds((current) => (
@@ -173,16 +243,25 @@ function Scenario5Game({ scenario, lastChoice, onSelect }) {
     ));
   }
 
-  function handleSecureSend() {
-    const choice = getChoiceById(scenario, 'c');
-    if (choice) onSelect(choice);
-  }
+  const status = useMemo(() => {
+    if (onlySensitiveRedacted) {
+      return 'Anonymisation optimale : seules les données sensibles sont masquées.';
+    }
+    if (allFieldsRedacted) {
+      return 'Anonymisation totale : approche très prudente (équivalent à ne pas exploiter pleinement l\'IA).';
+    }
+    if (noFieldRedacted) {
+      return 'Aucune anonymisation : risque élevé de partage de données personnelles.';
+    }
+
+    return 'Anonymisation partielle : continuez pour atteindre un niveau de sécurité cohérent.';
+  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted]);
 
   return (
     <div className="scenario-game-card">
       <div className="game-header">
         <span className="game-kicker">Mini-jeu</span>
-        <p className="game-instruction">Masquez les données sensibles avant d'autoriser l'envoi vers l'assistant IA.</p>
+        <p className="game-instruction">Cliquez sur chaque ligne pour masquer ou révéler l'information avant envoi à l'IA.</p>
       </div>
 
       <div className="redaction-sheet">
@@ -193,35 +272,18 @@ function Scenario5Game({ scenario, lastChoice, onSelect }) {
               key={field.id}
               type="button"
               className={`redaction-line${field.sensitive ? ' redaction-line--sensitive' : ''}${isRedacted ? ' redaction-line--redacted' : ''}`}
-              onClick={() => field.sensitive && toggleField(field.id)}
-              disabled={!field.sensitive}
+              onClick={() => toggleField(field.id)}
             >
               <span className="redaction-label">{field.label}</span>
               <span className="redaction-value">
-                {isRedacted ? '████████████' : field.sensitive ? 'Cliquer pour anonymiser' : 'Conserver'}
+                {isRedacted ? '████████████' : field.value}
               </span>
             </button>
           );
         })}
       </div>
 
-      <p className="game-status">
-        {allSensitiveRedacted
-          ? 'Toutes les données sensibles sont anonymisées.'
-          : 'Anonymisez les noms et commentaires sensibles pour sécuriser l’envoi.'}
-      </p>
-
-      <div className="game-actions-row">
-        <button type="button" className="game-alt-btn" onClick={() => onSelect(getChoiceById(scenario, 'a'))}>
-          Ne pas utiliser l'IA
-        </button>
-        <button type="button" className="game-alt-btn game-alt-btn--danger" onClick={() => onSelect(getChoiceById(scenario, 'b'))}>
-          Envoyer sans anonymiser
-        </button>
-        <button type="button" className="game-primary-btn" disabled={!allSensitiveRedacted} onClick={handleSecureSend}>
-          Autoriser l'envoi à l'IA
-        </button>
-      </div>
+      <p className="game-status">{status}</p>
 
       <DecisionBanner choice={lastChoice} />
     </div>
@@ -229,23 +291,45 @@ function Scenario5Game({ scenario, lastChoice, onSelect }) {
 }
 
 function Scenario7Game({ scenario, lastChoice, onSelect }) {
-  const [addedConstraints, setAddedConstraints] = useState([]);
+  const [addedInfos, setAddedInfos] = useState([]);
 
-  function addConstraint(constraint) {
-    setAddedConstraints((current) => (
-      current.some((item) => item.id === constraint.id)
+  function addInfo(info) {
+    setAddedInfos((current) => (
+      current.some((item) => item.id === info.id)
         ? current
-        : [...current, constraint]
+        : [...current, info]
     ));
   }
 
-  const allConstraintsAdded = addedConstraints.length === promoConstraints.length;
+  const importantIds = promoInfoOptions
+    .filter((info) => info.important)
+    .map((info) => info.id);
+  const selectedIds = addedInfos.map((info) => info.id);
+  const hasAllImportant = importantIds.every((id) => selectedIds.includes(id));
+  const selectedNonImportantCount = addedInfos.filter((info) => !info.important).length;
+
+  const inferredChoiceId = useMemo(() => {
+    if (addedInfos.length === 0) return 'b';
+    if (hasAllImportant && selectedNonImportantCount === 0) return 'a';
+    return 'c';
+  }, [addedInfos.length, hasAllImportant, selectedNonImportantCount]);
 
   useEffect(() => {
-    if (!allConstraintsAdded || lastChoice?.id === 'a') return;
-    const choice = getChoiceById(scenario, 'a');
+    if (!inferredChoiceId || lastChoice?.id === inferredChoiceId) return;
+    const choice = getChoiceById(scenario, inferredChoiceId);
     if (choice) onSelect(choice);
-  }, [allConstraintsAdded, lastChoice?.id, onSelect, scenario]);
+  }, [inferredChoiceId, lastChoice?.id, onSelect, scenario]);
+
+  const status = useMemo(() => {
+    if (inferredChoiceId === 'a') {
+      return 'Excellent : vous avez intégré les informations critiques du terrain sans surcharger le brief.';
+    }
+    if (inferredChoiceId === 'b') {
+      return 'Aucune information ajoutée : cela revient à utiliser le brief IA tel quel.';
+    }
+
+    return 'Brief partiellement ajusté ou surchargé : utile, mais moins efficace que de cibler les vraies contraintes.';
+  }, [inferredChoiceId]);
 
   return (
     <div className="scenario-game-card">
@@ -265,16 +349,16 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
         </div>
 
         <div className="brief-card brief-card--editable">
-          <p className="brief-title">Contraintes à intégrer</p>
+          <p className="brief-title">Informations à intégrer</p>
           <div className="brief-tags">
-            {promoConstraints.map((constraint) => (
+            {promoInfoOptions.map((info) => (
               <button
-                key={constraint.id}
+                key={info.id}
                 type="button"
-                className={`brief-tag${addedConstraints.some((item) => item.id === constraint.id) ? ' brief-tag--active' : ''}`}
-                onClick={() => addConstraint(constraint)}
+                className={`brief-tag${addedInfos.some((item) => item.id === info.id) ? ' brief-tag--active' : ''}`}
+                onClick={() => addInfo(info)}
               >
-                {constraint.label}
+                {info.label}
               </button>
             ))}
           </div>
@@ -284,28 +368,15 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
               <li>Mettre en place les têtes de gondole</li>
               <li>Faire le point promo avec l'équipe à 8h30</li>
               <li>Préparer le réassort des produits d'appel</li>
-              {addedConstraints.map((constraint) => (
-                <li key={constraint.id}>{constraint.label}</li>
+              {addedInfos.map((info) => (
+                <li key={info.id}>{info.label}</li>
               ))}
             </ul>
           </div>
         </div>
       </div>
 
-      <p className="game-status">
-        {allConstraintsAdded
-          ? 'Le brief est complet et prêt à être présenté à l’équipe.'
-          : 'Ajoutez les contraintes terrain oubliées pour fiabiliser le brief.'}
-      </p>
-
-      <div className="game-actions-row">
-        <button type="button" className="game-alt-btn game-alt-btn--danger" onClick={() => onSelect(getChoiceById(scenario, 'b'))}>
-          Utiliser le brief tel quel
-        </button>
-        <button type="button" className="game-alt-btn" onClick={() => onSelect(getChoiceById(scenario, 'c'))}>
-          Tout refaire moi-même
-        </button>
-      </div>
+      <p className="game-status">{status}</p>
 
       <DecisionBanner choice={lastChoice} />
     </div>
