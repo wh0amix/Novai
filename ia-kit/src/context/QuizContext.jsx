@@ -7,6 +7,7 @@ const initialState = {
   currentPhase: 'hook',
   currentScenarioIndex: 0,
   answers: [],
+  firstAttemptAnswers: [],
   showFeedback: false,
   lastChoice: null,
   userIdentity: null,
@@ -29,10 +30,30 @@ function quizReducer(state, action) {
       };
 
     case 'SUBMIT_CHOICE':
-      return {
-        ...state,
-        showFeedback: true,
-      };
+        if (!state.lastChoice) {
+          return {
+            ...state,
+            showFeedback: true,
+          };
+        }
+
+        return {
+          ...state,
+          firstAttemptAnswers: state.firstAttemptAnswers.some(
+            (answer) => answer.scenarioId === scenarios[state.currentScenarioIndex].id,
+          )
+            ? state.firstAttemptAnswers
+            : [
+              ...state.firstAttemptAnswers,
+              {
+                scenarioId: scenarios[state.currentScenarioIndex].id,
+                choiceId: state.lastChoice.id,
+                profile: state.lastChoice.profile,
+                points: state.lastChoice.points,
+              },
+            ],
+          showFeedback: true,
+        };
 
     case 'REVIEW_CHOICES':
       return {
@@ -78,6 +99,7 @@ function quizReducer(state, action) {
         ...state,
         currentPhase: 'hook',
         currentScenarioIndex: 0,
+          firstAttemptAnswers: [],
         showFeedback: false,
         lastChoice: null,
       };

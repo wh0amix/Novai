@@ -100,11 +100,23 @@ export default function ResultPhase() {
         if (!res?.skipped) console.info('[Brevo] Email RH envoyé avec succès.');
       })
       .catch((err) => console.error('[Brevo] Échec envoi email :', err.message));
-  }, [userProfile, answers, userIdentity]);
+  }, [userProfile, answers, userIdentity, reviewCount]);
 
   if (!userProfile) return null;
 
-  const { title, tagline, description, score } = userProfile;
+  const {
+    title,
+    tagline,
+    description,
+    score,
+    totalPoints,
+    maxPoints,
+    realScore,
+    improvedScore,
+    realPoints,
+    correctedCount,
+    profilePercentages,
+  } = userProfile;
   const scoreColorClass = score >= 70 ? 'result-score-card--green' : score >= 40 ? 'result-score-card--orange' : 'result-score-card--red';
 
   if (!memoDownloaded) {
@@ -178,6 +190,13 @@ export default function ResultPhase() {
             </div>
           </div>
 
+          <div className="result-profile-description-card">
+            <p className="result-profile-description-main">{description}</p>
+            {(userProfile.details || []).map((paragraph, i) => (
+              <p key={i} className="result-profile-description-detail">{paragraph}</p>
+            ))}
+          </div>
+
           <div className="result-keypoints-card">
             <h3 className="result-keypoints-title">Points clés à retenir</h3>
             <ul className="result-keypoints-list">
@@ -189,11 +208,34 @@ export default function ResultPhase() {
               ))}
             </ul>
           </div>
+
+          <div className="result-vigilance-card">
+            <h3 className="result-vigilance-title">Point de vigilance</h3>
+            <p className="result-vigilance-text">
+              {userProfile.vigilance || 'Gardez un esprit critique sur chaque réponse proposée par l\'IA.'}
+            </p>
+          </div>
+
+          <div className="result-advice-card">
+            <h3 className="result-advice-title">Conseil personnalisé</h3>
+            <p className="result-advice-text">{userProfile.advice}</p>
+          </div>
         </div>
 
         <div className="result-side-panel">
           <div className={`result-score-card ${scoreColorClass}`}>
             <strong className="result-score-main-value">{score}%</strong>
+            <p className="result-score-points-detail">
+              Score améliore : {improvedScore}% ({totalPoints}/{maxPoints} points)
+            </p>
+            <p className="result-score-points-detail result-score-points-detail--secondary">
+              Score reel : {realScore}% ({realPoints}/{maxPoints} points)
+            </p>
+            {correctedCount > 0 && (
+              <p className="result-score-correction-note">
+                +{correctedCount} reponse{correctedCount > 1 ? 's' : ''} moderee/mauvaise corrigee{correctedCount > 1 ? 's' : ''}.
+              </p>
+            )}
             <div className="result-score-line" aria-hidden="true" />
             <p className="result-score-main-label">Niveau de vigilance IA</p>
             <p className="result-score-main-desc">{description}</p>
@@ -206,6 +248,37 @@ export default function ResultPhase() {
                 ? 'Aucun retour sur les choix'
                 : `${reviewCount} retour${reviewCount > 1 ? 's' : ''} vers les choix`}
             </div>
+          </div>
+
+          <div className="result-profile-score-card">
+            <p className="result-profile-score-title">Score par profil (%)</p>
+            {[
+              ['captain', 'Le Capitaine'],
+              ['explorer', 'L\'Explorateur'],
+              ['skeptic', 'Le Sceptique'],
+            ].map(([key, label]) => {
+              const value = profilePercentages?.[key] ?? 0;
+              const isMainProfile = key === userProfile.key;
+              return (
+                <div key={key} className="result-profile-score-row">
+                  <div className="result-profile-score-row-top">
+                    <span className={`result-profile-score-label${isMainProfile ? ' result-profile-score-label--active' : ''}`}>
+                      {label}
+                    </span>
+                    <strong className="result-profile-score-value">{value}%</strong>
+                  </div>
+                  <div className="result-profile-score-bar" aria-hidden="true">
+                    <span
+                      className={`result-profile-score-fill${isMainProfile ? ' result-profile-score-fill--active' : ''}`}
+                      style={{ width: `${value}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+            <p className="result-profile-score-note">
+              Le profil avec le pourcentage le plus élevé détermine votre profil final.
+            </p>
           </div>
 
           <div className="result-side-actions">

@@ -8,13 +8,23 @@ export default function useQuiz() {
 
   const currentScenario = scenarios[state.currentScenarioIndex] ?? null;
 
-  const userProfile = calculateProfile(state.answers);
+  const userProfile = calculateProfile(state.answers, state.firstAttemptAnswers);
 
-  function calculateProfile(answers) {
+  function calculateProfile(answers, firstAttemptAnswers) {
     if (answers.length < scenarios.length) return null;
 
+    const allProfileKeys = ['captain', 'explorer', 'skeptic'];
     const counts = answers.reduce((acc, answer) => {
       acc[answer.profile] = (acc[answer.profile] || 0) + 1;
+      return acc;
+    }, {
+      captain: 0,
+      explorer: 0,
+      skeptic: 0,
+    });
+
+    const profilePercentages = allProfileKeys.reduce((acc, key) => {
+      acc[key] = Math.round((counts[key] / scenarios.length) * 100);
       return acc;
     }, {});
 
@@ -24,10 +34,33 @@ export default function useQuiz() {
 
     // Calcul du score en pourcentage (maximum = 10 points pour 10 scénarios)
     const totalPoints = answers.reduce((sum, a) => sum + (a.points ?? 0), 0);
+    const realPoints = firstAttemptAnswers.reduce((sum, a) => sum + (a.points ?? 0), 0);
     const maxPoints = scenarios.length; // 10 points max
-    const score = Math.round((totalPoints / maxPoints) * 100);
+    const improvedScore = Math.round((totalPoints / maxPoints) * 100);
+    const realScore = Math.round((realPoints / maxPoints) * 100);
 
-    return { key: profileKey, ...profiles[profileKey], score };
+    const firstAttemptByScenario = new Map(
+      firstAttemptAnswers.map((entry) => [entry.scenarioId, entry.points ?? 0]),
+    );
+    const correctedCount = answers.reduce((count, answer) => {
+      const firstPoints = firstAttemptByScenario.get(answer.scenarioId);
+      if (typeof firstPoints !== 'number') return count;
+      const finalPoints = answer.points ?? 0;
+      return firstPoints < 1 && finalPoints > firstPoints ? count + 1 : count;
+    }, 0);
+
+    return {
+      key: profileKey,
+      ...profiles[profileKey],
+      score: improvedScore,
+      realScore,
+      improvedScore,
+      profilePercentages,
+      totalPoints,
+      realPoints,
+      maxPoints,
+      correctedCount,
+    };
   }
 
   const startQuiz = () => dispatch({ type: 'START_QUIZ' });
