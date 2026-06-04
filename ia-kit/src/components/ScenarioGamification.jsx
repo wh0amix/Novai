@@ -17,12 +17,17 @@ const hrFields = [
 ];
 
 const promoInfoOptions = [
+  { id: 'base-gondole', label: 'Mettre en place les têtes de gondole', important: true },
+  { id: 'base-team-brief', label: 'Faire le point promo avec l\'équipe à 8h30', important: true },
+  { id: 'base-restock', label: 'Préparer le réassort des produits d\'appel', important: true },
   { id: 'staffing', label: 'Équipe réduite', important: true },
   { id: 'delivery', label: 'Livraison en retard', important: true },
   { id: 'layout', label: 'Rayon à réorganiser', important: true },
   { id: 'playlist', label: 'Changer la playlist du magasin', important: false },
   { id: 'photo', label: 'Prévoir une photo vitrine en fin de journée', important: false },
   { id: 'coffee', label: 'Organiser une pause café debrief à 16h', important: false },
+  { id: 'snacks', label: 'Choisir les snacks de la pause équipe', important: false },
+  { id: 'music-volume', label: 'Ajuster le volume de la musique en réserve', important: false },
 ];
 
 function getChoiceById(scenario, choiceId) {
@@ -43,6 +48,7 @@ function DecisionBanner({ choice }) {
 function Scenario4Game({ scenario, lastChoice, onSelect }) {
   const [zones, setZones] = useState({ deck: confidentialDataCards, safe: [], shred: [] });
   const [draggedId, setDraggedId] = useState(null);
+  const [selectedCardId, setSelectedCardId] = useState(null);
   const totalCards = confidentialDataCards.length;
   const allPlaced = zones.deck.length === 0;
   const allInDeck = zones.deck.length === totalCards;
@@ -140,6 +146,7 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
 
     nextZones[targetZone] = [...nextZones[targetZone], movedCard];
     setZones(nextZones);
+    setSelectedCardId(null);
   }
 
   function handleDrop(targetZone) {
@@ -148,11 +155,19 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
     setDraggedId(null);
   }
 
+  function handleMoveSelected(targetZone) {
+    if (!selectedCardId) return;
+    moveCard(selectedCardId, targetZone);
+  }
+
   return (
     <div className="scenario-game-card">
       <div className="game-header">
         <span className="game-kicker">Mini-jeu</span>
         <p className="game-instruction">Triez les données à conserver pour l'analyse IA et celles à détruire.</p>
+        <div className="game-touch-guide" role="note" aria-label="Aide mode tactile">
+          <strong>Mode tactile :</strong> 1) sélectionnez une carte dans le fichier brut, 2) choisissez sa destination.
+        </div>
       </div>
 
       <div className="game-grid game-grid--three">
@@ -166,6 +181,9 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
             className={`game-dropzone ${className}`}
             onDragOver={(event) => event.preventDefault()}
             onDrop={() => handleDrop(zoneKey)}
+            onClick={() => {
+              if (selectedCardId) handleMoveSelected(zoneKey);
+            }}
           >
             <p className="game-zone-title">{label}</p>
             <div className="game-cards-list">
@@ -173,11 +191,14 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
                 <button
                   key={card.id}
                   type="button"
-                  className="game-chip"
+                  className={`game-chip${selectedCardId === card.id ? ' game-chip--selected' : ''}`}
                   draggable
                   onDragStart={() => setDraggedId(card.id)}
                   onClick={() => {
-                    if (zoneKey === 'deck') return;
+                    if (zoneKey === 'deck') {
+                      setSelectedCardId(card.id);
+                      return;
+                    }
                     moveCard(card.id, 'deck');
                   }}
                 >
@@ -188,6 +209,12 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
           </div>
         ))}
       </div>
+
+      <p className="game-selection-hint" aria-live="polite">
+        {selectedCardId
+          ? `Carte sélectionnée : ${zones.deck.find((card) => card.id === selectedCardId)?.label ?? 'élément'}`
+          : 'Aucune carte sélectionnée.'}
+      </p>
 
       <p className="game-status">{status}</p>
 
@@ -317,8 +344,16 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
   useEffect(() => {
     if (!inferredChoiceId || lastChoice?.id === inferredChoiceId) return;
     const choice = getChoiceById(scenario, inferredChoiceId);
-    if (choice) onSelect(choice);
-  }, [inferredChoiceId, lastChoice?.id, onSelect, scenario]);
+    if (!choice) return;
+
+    onSelect({
+      ...choice,
+      gameMeta: {
+        scenarioId: scenario.id,
+        selectedInfos: addedInfos,
+      },
+    });
+  }, [addedInfos, inferredChoiceId, lastChoice?.id, onSelect, scenario]);
 
   const status = useMemo(() => {
     if (inferredChoiceId === 'a') {
@@ -335,7 +370,7 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
     <div className="scenario-game-card">
       <div className="game-header">
         <span className="game-kicker">Mini-jeu</span>
-        <p className="game-instruction">Complétez le brief IA avec les contraintes terrain oubliées.</p>
+        <p className="game-instruction">Recomposez le nouveau brief avec les éléments utiles pour l\'équipe.</p>
       </div>
 
       <div className="brief-board">
@@ -349,7 +384,7 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
         </div>
 
         <div className="brief-card brief-card--editable">
-          <p className="brief-title">Informations à intégrer</p>
+          <p className="brief-title">Informations à intégrer au nouveau brief</p>
           <div className="brief-tags">
             {promoInfoOptions.map((info) => (
               <button
@@ -365,9 +400,6 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
           <div className="brief-merged">
             <p className="brief-subtitle">Brief final</p>
             <ul className="brief-list brief-list--merged">
-              <li>Mettre en place les têtes de gondole</li>
-              <li>Faire le point promo avec l'équipe à 8h30</li>
-              <li>Préparer le réassort des produits d'appel</li>
               {addedInfos.map((info) => (
                 <li key={info.id}>{info.label}</li>
               ))}

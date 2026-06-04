@@ -691,6 +691,16 @@ body {
   line-height: 1.55;
 }
 
+.game-touch-guide {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+  background: rgba(67,71,243,0.08);
+  border: 1px solid rgba(67,71,243,0.18);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.7rem;
+}
+
 .game-grid {
   display: grid;
   gap: 0.875rem;
@@ -708,6 +718,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  touch-action: manipulation;
 }
 
 .game-dropzone--neutral {
@@ -752,10 +763,56 @@ body {
   cursor: grabbing;
 }
 
+.game-chip--selected {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 1px;
+  background: rgba(67,71,243,0.08);
+}
+
+.game-mobile-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.game-mobile-btn {
+  border: 1px solid var(--color-secondary);
+  background: rgba(67,71,243,0.08);
+  color: var(--color-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  min-height: 44px;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+}
+
+.game-mobile-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.game-mobile-btn--danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  background: rgba(227,30,36,0.08);
+}
+
+.game-mobile-btn--neutral {
+  border-color: var(--color-text-muted);
+  color: var(--color-text-muted);
+  background: rgba(107,107,107,0.08);
+}
+
 .game-status {
   font-size: 0.86rem;
   color: var(--color-text-muted);
   line-height: 1.5;
+}
+
+.game-selection-hint {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
 }
 
 .game-actions-row {
@@ -2075,6 +2132,91 @@ body {
 /* ═══════════════════════════
    RESPONSIVE
 ═══════════════════════════ */
+@media (max-width: 1024px) {
+  .app-main {
+    padding: 1.25rem 1.25rem 2rem;
+  }
+
+  .phase {
+    max-width: 100%;
+  }
+
+  .intro-layout {
+    gap: 1.6rem;
+  }
+
+  .scenario-image-container {
+    height: 340px;
+  }
+
+  .game-grid--three {
+    grid-template-columns: 1fr;
+  }
+
+  .brief-board {
+    grid-template-columns: 1fr;
+  }
+
+  .result-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-nextsteps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 1rem;
+  }
+
+  .app-nav {
+    gap: 1rem;
+  }
+
+  .app-main {
+    padding: 1rem 0.9rem 1.5rem;
+  }
+
+  .scenario-image-container {
+    height: 270px;
+  }
+
+  .scenario-title {
+    font-size: 1.45rem;
+  }
+
+  .scenario-question {
+    font-size: 1.1rem;
+  }
+
+  .scenario-context-card {
+    padding: 1rem;
+  }
+
+  .game-mobile-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .game-dropzone {
+    min-height: 170px;
+    padding: 0.85rem;
+  }
+
+  .game-chip {
+    width: 100%;
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    text-align: left;
+  }
+
+  .result-title {
+    font-size: 2.25rem;
+  }
+}
+
 @media (max-width: 640px) {
   .app-nav-link { display: none; }
   .app-header { padding: 0 1rem; }
@@ -2095,6 +2237,9 @@ body {
   .brief-board { grid-template-columns: 1fr; }
   .game-actions-row { flex-direction: column; }
   .game-alt-btn, .game-primary-btn { width: 100%; }
+  .game-touch-guide { font-size: 0.78rem; }
+  .game-mobile-btn { font-size: 0.78rem; }
+  .game-zone-title { font-size: 0.82rem; }
   .redaction-line { flex-direction: column; align-items: flex-start; }
   .resources-practices-grid { grid-template-columns: 1fr; }
   .resources-dodonts-grid { grid-template-columns: 1fr; }
