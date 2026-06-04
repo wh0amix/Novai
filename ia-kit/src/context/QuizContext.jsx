@@ -3,6 +3,9 @@ import { verifyIdentityToken } from '../services/token';
 import scenarios from '../data/scenarios';
 import { QuizContext, QuizDispatchContext } from './quizContexts';
 
+const QUIZ_STORAGE_KEY = 'novai-quiz-state-v1';
+const validPhases = new Set(['hook', 'intro', 'scenario', 'result', 'resources']);
+
 const initialState = {
   currentPhase: 'hook',
   currentScenarioIndex: 0,
@@ -14,6 +17,57 @@ const initialState = {
   reviewCount: 0,
   memoDownloaded: false,
 };
+
+function readPersistedState() {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const rawState = window.localStorage.getItem(QUIZ_STORAGE_KEY);
+    if (!rawState) return null;
+
+    const parsedState = JSON.parse(rawState);
+    if (!parsedState || typeof parsedState !== 'object') return null;
+
+    const safeScenarioIndex = Number.isInteger(parsedState.currentScenarioIndex)
+      ? Math.min(Math.max(parsedState.currentScenarioIndex, 0), scenarios.length - 1)
+      : initialState.currentScenarioIndex;
+
+    return {
+      ...initialState,
+      currentPhase: validPhases.has(parsedState.currentPhase) ? parsedState.currentPhase : initialState.currentPhase,
+      currentScenarioIndex: safeScenarioIndex,
+      answers: Array.isArray(parsedState.answers) ? parsedState.answers : initialState.answers,
+      firstAttemptAnswers: Array.isArray(parsedState.firstAttemptAnswers) ? parsedState.firstAttemptAnswers : initialState.firstAttemptAnswers,
+      showFeedback: Boolean(parsedState.showFeedback),
+      lastChoice: parsedState.lastChoice ?? null,
+      reviewCount: Number.isInteger(parsedState.reviewCount) ? parsedState.reviewCount : initialState.reviewCount,
+      memoDownloaded: Boolean(parsedState.memoDownloaded),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function getInitialState() {
+  return readPersistedState() ?? initialState;
+}
+
+function persistState(state) {
+  if (typeof window === 'undefined') return;
+
+  const persistedState = {
+    currentPhase: state.currentPhase,
+    currentScenarioIndex: state.currentScenarioIndex,
+    answers: state.answers,
+    firstAttemptAnswers: state.firstAttemptAnswers,
+    showFeedback: state.showFeedback,
+    lastChoice: state.lastChoice,
+    reviewCount: state.reviewCount,
+    memoDownloaded: state.memoDownloaded,
+  };
+
+  window.localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(persistedState));
+}
 
 function quizReducer(state, action) {
   switch (action.type) {
@@ -116,7 +170,7 @@ function quizReducer(state, action) {
 }
 
 export function AppProvider({ children }) {
-  const [state, dispatch] = useReducer(quizReducer, initialState);
+  const [state, dispatch] = useReducer(quizReducer, initialState, getInitialState);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -126,6 +180,10 @@ export function AppProvider({ children }) {
       if (identity) dispatch({ type: 'INIT_IDENTITY', payload: identity });
     });
   }, []);
+
+  useEffect(() => {
+    persistState(state);
+  }, [state]);
 
   return (
     <QuizContext.Provider value={state}>

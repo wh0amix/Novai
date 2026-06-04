@@ -14,6 +14,7 @@ export default function ScenarioCard({ scenario }) {
   const { showFeedback, lastChoice, selectChoice, submitChoice, nextScenario, currentScenarioIndex } = useQuiz();
   const isGamifiedScenario = gamifiedScenarioIds.has(scenario.id);
   const isLastScenario = currentScenarioIndex === scenarios.length - 1;
+  const isScenario5 = scenario.id === 'hr-data-confidentiality';
   const imageStyleByScenario = {
     'daily-task-prioritization': { objectPosition: 'center 20%' },
   };
@@ -51,7 +52,8 @@ export default function ScenarioCard({ scenario }) {
             alt={scenario.title}
             className="scenario-image"
             style={imageStyle}
-            loading="lazy"
+            loading={isScenario5 ? 'eager' : 'lazy'}
+            fetchPriority={isScenario5 ? 'high' : 'auto'}
           />
         </div>
       )}
