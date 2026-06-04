@@ -10,11 +10,23 @@ export default function useQuiz() {
 
   const userProfile = calculateProfile(state.answers, state.firstAttemptAnswers);
 
+  function dedupeAnswersByScenario(entries) {
+    const byScenario = new Map();
+    entries.forEach((entry) => {
+      if (!entry?.scenarioId) return;
+      byScenario.set(entry.scenarioId, entry);
+    });
+    return Array.from(byScenario.values());
+  }
+
   function calculateProfile(answers, firstAttemptAnswers) {
-    if (answers.length < scenarios.length) return null;
+    const finalAnswers = dedupeAnswersByScenario(answers);
+    const realAttemptAnswers = dedupeAnswersByScenario(firstAttemptAnswers);
+
+    if (finalAnswers.length < scenarios.length) return null;
 
     const allProfileKeys = ['captain', 'explorer', 'skeptic'];
-    const realCounts = firstAttemptAnswers.reduce((acc, answer) => {
+    const realCounts = realAttemptAnswers.reduce((acc, answer) => {
       acc[answer.profile] = (acc[answer.profile] || 0) + 1;
       return acc;
     }, {
@@ -28,7 +40,7 @@ export default function useQuiz() {
       return acc;
     }, {});
 
-    const counts = answers.reduce((acc, answer) => {
+    const counts = finalAnswers.reduce((acc, answer) => {
       acc[answer.profile] = (acc[answer.profile] || 0) + 1;
       return acc;
     }, {
@@ -42,16 +54,16 @@ export default function useQuiz() {
     const profileKey = topProfiles.length === 1 ? topProfiles[0] : 'explorer';
 
     // Calcul du score en pourcentage (maximum = 10 points pour 10 scénarios)
-    const totalPoints = answers.reduce((sum, a) => sum + (a.points ?? 0), 0);
-    const realPoints = firstAttemptAnswers.reduce((sum, a) => sum + (a.points ?? 0), 0);
+    const totalPoints = finalAnswers.reduce((sum, a) => sum + (a.points ?? 0), 0);
+    const realPoints = realAttemptAnswers.reduce((sum, a) => sum + (a.points ?? 0), 0);
     const maxPoints = scenarios.length; // 10 points max
     const improvedScore = Math.round((totalPoints / maxPoints) * 100);
     const realScore = Math.round((realPoints / maxPoints) * 100);
 
     const firstAttemptByScenario = new Map(
-      firstAttemptAnswers.map((entry) => [entry.scenarioId, entry.points ?? 0]),
+      realAttemptAnswers.map((entry) => [entry.scenarioId, entry.points ?? 0]),
     );
-    const correctedCount = answers.reduce((count, answer) => {
+    const correctedCount = finalAnswers.reduce((count, answer) => {
       const firstPoints = firstAttemptByScenario.get(answer.scenarioId);
       if (typeof firstPoints !== 'number') return count;
       const finalPoints = answer.points ?? 0;

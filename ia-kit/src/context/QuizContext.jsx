@@ -117,15 +117,16 @@ function quizReducer(state, action) {
       };
 
     case 'NEXT_SCENARIO': {
-      const newAnswers = [
-        ...state.answers,
-        {
-          scenarioId: action.payload.scenarioId,
-          choiceId: state.lastChoice.id,
-          profile: state.lastChoice.profile,
-          points: state.lastChoice.points,
-        },
-      ];
+      const newAnswer = {
+        scenarioId: action.payload.scenarioId,
+        choiceId: state.lastChoice.id,
+        profile: state.lastChoice.profile,
+        points: state.lastChoice.points,
+      };
+      const answerIndex = state.answers.findIndex((answer) => answer.scenarioId === newAnswer.scenarioId);
+      const newAnswers = answerIndex === -1
+        ? [...state.answers, newAnswer]
+        : state.answers.map((answer, index) => (index === answerIndex ? newAnswer : answer));
       const nextIndex = state.currentScenarioIndex + 1;
       const isFinished = nextIndex >= scenarios.length;
 
