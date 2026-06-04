@@ -14,7 +14,7 @@ export default function useQuiz() {
     if (answers.length < scenarios.length) return null;
 
     const allProfileKeys = ['captain', 'explorer', 'skeptic'];
-    const counts = answers.reduce((acc, answer) => {
+    const realCounts = firstAttemptAnswers.reduce((acc, answer) => {
       acc[answer.profile] = (acc[answer.profile] || 0) + 1;
       return acc;
     }, {
@@ -24,9 +24,18 @@ export default function useQuiz() {
     });
 
     const profilePercentages = allProfileKeys.reduce((acc, key) => {
-      acc[key] = Math.round((counts[key] / scenarios.length) * 100);
+      acc[key] = Math.round((realCounts[key] / scenarios.length) * 100);
       return acc;
     }, {});
+
+    const counts = answers.reduce((acc, answer) => {
+      acc[answer.profile] = (acc[answer.profile] || 0) + 1;
+      return acc;
+    }, {
+      captain: 0,
+      explorer: 0,
+      skeptic: 0,
+    });
 
     const maxCount = Math.max(...Object.values(counts));
     const topProfiles = Object.keys(counts).filter((k) => counts[k] === maxCount);

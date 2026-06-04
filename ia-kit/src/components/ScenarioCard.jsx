@@ -15,7 +15,6 @@ export default function ScenarioCard({ scenario }) {
   const isGamifiedScenario = gamifiedScenarioIds.has(scenario.id);
   const isLastScenario = currentScenarioIndex === scenarios.length - 1;
   const imageStyleByScenario = {
-    'hr-data-confidentiality': { objectFit: 'contain', objectPosition: 'center top', backgroundColor: '#f4f4f4' },
     'daily-task-prioritization': { objectPosition: 'center 20%' },
   };
   const imageStyle = imageStyleByScenario[scenario.id];

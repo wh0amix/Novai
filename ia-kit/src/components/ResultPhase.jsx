@@ -5,6 +5,28 @@ import scenarios from '../data/scenarios';
 
 
 const totalScenarios = scenarios.length;
+
+function getVigilanceFromRealScore(realScore) {
+  if (realScore >= 70) {
+    return {
+      level: 'Vigilance élevée',
+      description: 'Votre score réel montre une bonne maîtrise des bons réflexes IA.',
+    };
+  }
+
+  if (realScore >= 40) {
+    return {
+      level: 'Vigilance modérée',
+      description: 'Les bases sont présentes, mais certains réflexes IA doivent encore être consolidés.',
+    };
+  }
+
+  return {
+    level: 'Vigilance faible',
+    description: 'Votre score réel indique qu\'un renforcement des pratiques IA est nécessaire.',
+  };
+}
+
 const getProfileContent = (profileKey) => {
   const profileContent = {
     captain: {
@@ -117,6 +139,7 @@ export default function ResultPhase() {
     correctedCount,
     profilePercentages,
   } = userProfile;
+  const vigilanceFromRealScore = getVigilanceFromRealScore(realScore);
   const scoreColorClass = score >= 70 ? 'result-score-card--green' : score >= 40 ? 'result-score-card--orange' : 'result-score-card--red';
 
   if (!memoDownloaded) {
@@ -137,7 +160,7 @@ export default function ResultPhase() {
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
           </div>
-          <h3 className="result-memo-gate-title">Téléchargez votre mémo de formation</h3>
+          <h3 className="result-memo-gate-title">Téléchargez votre mémo de formation pour avoir accès à vos résultats</h3>
           <p className="result-memo-gate-desc">
             Votre mémo personnalisé récapitule les bonnes pratiques IA à retenir. Téléchargez-le pour accéder à vos résultats.
           </p>
@@ -237,8 +260,10 @@ export default function ResultPhase() {
               </p>
             )}
             <div className="result-score-line" aria-hidden="true" />
-            <p className="result-score-main-label">Niveau de vigilance IA</p>
-            <p className="result-score-main-desc">{description}</p>
+            <p className="result-score-main-label">Niveau de vigilance IA (score réel)</p>
+            <p className="result-score-main-desc">
+              {vigilanceFromRealScore.level} - {vigilanceFromRealScore.description}
+            </p>
             <div className="result-score-review-stat">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>

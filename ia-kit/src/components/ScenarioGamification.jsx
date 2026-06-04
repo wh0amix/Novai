@@ -10,10 +10,12 @@ const confidentialDataCards = [
 
 const hrFields = [
   { id: 'first-last-name', label: 'Nom et prénom', value: 'Sophie Martin', sensitive: true },
+  { id: 'email', label: 'Email', value: 'sophie.martin@entreprise.fr', sensitive: true },
+  { id: 'postal-address', label: 'Adresse postale', value: '12 rue des Acacias, 75015 Paris', sensitive: true },
   { id: 'position', label: 'Poste occupé', value: 'Responsable caisse', sensitive: false },
-  { id: 'year-review', label: 'Évaluation annuelle', value: 'Atteint 92% des objectifs, besoin de coaching sur le closing', sensitive: true },
+  { id: 'year-review', label: 'Évaluation annuelle', value: 'Atteint 92% des objectifs, besoin de coaching sur le closing', sensitive: false },
   { id: 'strengths', label: 'Points forts', value: 'Organisation, relation client, réactivité', sensitive: false },
-  { id: 'personal-note', label: 'Note manager', value: 'Souhaite évoluer vers un poste adjoint en 2026', sensitive: true },
+  { id: 'personal-note', label: 'Note manager', value: 'Souhaite évoluer vers un poste adjoint en 2026', sensitive: false },
 ];
 
 const promoInfoOptions = [
@@ -34,18 +36,7 @@ function getChoiceById(scenario, choiceId) {
   return scenario.choices.find((choice) => choice.id === choiceId) ?? null;
 }
 
-function DecisionBanner({ choice }) {
-  if (!choice) return null;
-
-  return (
-    <div className="game-banner" aria-live="polite">
-      <span className="game-banner-label">Décision sélectionnée</span>
-      <strong className="game-banner-title">{choice.title}</strong>
-    </div>
-  );
-}
-
-function Scenario4Game({ scenario, lastChoice, onSelect }) {
+function Scenario4Game({ scenario, onSelect }) {
   const [zones, setZones] = useState({ deck: confidentialDataCards, safe: [], shred: [] });
   const [draggedId, setDraggedId] = useState(null);
   const [selectedCardId, setSelectedCardId] = useState(null);
@@ -165,9 +156,6 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
       <div className="game-header">
         <span className="game-kicker">Mini-jeu</span>
         <p className="game-instruction">Triez les données à conserver pour l'analyse IA et celles à détruire.</p>
-        <div className="game-touch-guide" role="note" aria-label="Aide mode tactile">
-          <strong>Mode tactile :</strong> 1) sélectionnez une carte dans le fichier brut, 2) choisissez sa destination.
-        </div>
       </div>
 
       <div className="game-grid game-grid--three">
@@ -217,13 +205,11 @@ function Scenario4Game({ scenario, lastChoice, onSelect }) {
       </p>
 
       <p className="game-status">{status}</p>
-
-      <DecisionBanner choice={lastChoice} />
     </div>
   );
 }
 
-function Scenario5Game({ scenario, lastChoice, onSelect }) {
+function Scenario5Game({ scenario, onSelect }) {
   const [redactedIds, setRedactedIds] = useState([]);
 
   const sensitiveIds = hrFields.filter((field) => field.sensitive).map((field) => field.id);
@@ -311,13 +297,11 @@ function Scenario5Game({ scenario, lastChoice, onSelect }) {
       </div>
 
       <p className="game-status">{status}</p>
-
-      <DecisionBanner choice={lastChoice} />
     </div>
   );
 }
 
-function Scenario7Game({ scenario, lastChoice, onSelect }) {
+function Scenario7Game({ scenario, onSelect }) {
   const [addedInfos, setAddedInfos] = useState([]);
 
   function addInfo(info) {
@@ -342,7 +326,7 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
   }, [addedInfos.length, hasAllImportant, selectedNonImportantCount]);
 
   useEffect(() => {
-    if (!inferredChoiceId || lastChoice?.id === inferredChoiceId) return;
+    if (!inferredChoiceId) return;
     const choice = getChoiceById(scenario, inferredChoiceId);
     if (!choice) return;
 
@@ -353,7 +337,7 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
         selectedInfos: addedInfos,
       },
     });
-  }, [addedInfos, inferredChoiceId, lastChoice?.id, onSelect, scenario]);
+  }, [addedInfos, inferredChoiceId, onSelect, scenario]);
 
   const status = useMemo(() => {
     if (inferredChoiceId === 'a') {
@@ -409,8 +393,6 @@ function Scenario7Game({ scenario, lastChoice, onSelect }) {
       </div>
 
       <p className="game-status">{status}</p>
-
-      <DecisionBanner choice={lastChoice} />
     </div>
   );
 }
