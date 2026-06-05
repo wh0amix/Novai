@@ -817,6 +817,7 @@ body {
   display: none;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.6rem;
+  margin-top: 0.75rem;
 }
 
 .game-mobile-btn {
@@ -2376,7 +2377,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .app-header {
     padding: 0 1rem;
   }
@@ -2407,7 +2408,6 @@ body {
 
   .game-mobile-actions {
     display: grid;
-    grid-template-columns: 1fr;
   }
 
   .game-dropzone {
@@ -2425,6 +2425,12 @@ body {
 
   .result-title {
     font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .game-mobile-actions {
+    grid-template-columns: 1fr;
   }
 }
 
