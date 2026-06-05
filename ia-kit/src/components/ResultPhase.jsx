@@ -186,7 +186,7 @@ export default function ResultPhase() {
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
           </div>
-          <h3 className="result-memo-gate-title">Téléchargez votre mémo de formation pour avoir accès à vos résultats</h3>
+          <h3 className="result-memo-gate-title">Téléchargez votre mémo de formation</h3>
           <p className="result-memo-gate-desc">
             Votre mémo personnalisé récapitule les bonnes pratiques IA à retenir. Téléchargez-le pour accéder à vos résultats.
           </p>

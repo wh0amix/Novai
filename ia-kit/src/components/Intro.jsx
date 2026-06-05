@@ -4,16 +4,17 @@ import scenarios from '../data/scenarios';
 export default function Intro() {
   const { goToScenarios } = useQuiz();
   const totalScenarios = scenarios.length;
+  const progressPercentage = 0;
 
   return (
     <section className="phase intro-phase" aria-label="Mise en situation">
-      <div className="intro-progress" aria-label={`Progression: 0 sur ${totalScenarios}`}>
-        <div className="intro-progress-track" aria-hidden="true">
-          {Array.from({ length: totalScenarios }).map((_, index) => (
-            <span key={index} className="intro-progress-segment" />
-          ))}
+      <div className="progress-container" aria-label={`Progression: 0 sur ${totalScenarios} scénarios`}>
+        <span className="progress-text">
+          Scénario 0 / {totalScenarios}
+        </span>
+        <div className="progress-bar" aria-hidden="true">
+          <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
         </div>
-        <span className="intro-progress-value">0/{totalScenarios}</span>
       </div>
 
       <div className="intro-content">
