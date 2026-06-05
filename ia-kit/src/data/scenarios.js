@@ -226,9 +226,9 @@ const scenarios = [
     id: 'promo-team-brief',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
     title: 'Brief d\'équipe avant opération promo : ',
-    subtitle: 'adapter l\'IA à la réalité terrain',
+    subtitle: "adapter l'IA à la réalité terrain",
     context:
-      "Une grosse opération promotionnelle commence le lendemain. Le manager utilise l'IA pour préparer un brief d'équipe clair et rapide. L'IA propose un brief bien structuré, mais oublie certaines contraintes du magasin : manque de personnel, livraison en retard et rayon à réorganiser. Comment utilisez-vous le brief proposé par l'IA ?",
+      "Une grosse opération promotionnelle commence le lendemain. Le manager utilise l'IA pour préparer un brief d'équipe clair et rapide. L'IA propose un brief bien structuré, mais oublie certaines contraintes du magasin : manque de personnel, livraison en retard et rayon à réorganiser.",
     choices: [
       {
         id: 'a',
@@ -237,7 +237,7 @@ const scenarios = [
         label: "Je complète le brief avec les contraintes du magasin avant de le présenter.",
         points: 1,
         feedback:
-          "Très bonne approche. L'équipe reçoit un brief clair qui intègre les difficultés prévues : effectifs réduits, retard de livraison et réorganisation du rayon. Vous utilisez l'IA pour structurer rapidement le brief tout en ajoutant les informations essentielles que seul le terrain permet d'identifier. À retenir : L'IA aide à préparer le travail, mais le manager apporte le contexte, l'adaptation et la décision finale.",
+          "Résultat : Vous construisez un brief final clair et réaliste. Vous gardez les actions importantes du brief initial, comme la mise en place des têtes de gondole, le point promo avec l'équipe et le réassort des produits d'appel. Vous ajoutez aussi les contraintes importantes : équipe réduite, livraison en retard et rayon à réorganiser. L'équipe reçoit donc un brief plus complet et mieux adapté à la situation. Feedback : Très bonne approche. Vous utilisez l'IA comme base de travail, mais vous ne reprenez pas tout automatiquement. Vous sélectionnez les informations vraiment utiles, vous ajoutez le contexte terrain et vous laissez de côté les éléments qui n'aident pas l'équipe à préparer l'opération promo. À retenir : L'IA peut aider à structurer un brief, mais c'est au manager de vérifier, compléter et adapter le message à la réalité du magasin.",
       },
       {
         id: 'b',
@@ -255,7 +255,7 @@ const scenarios = [
         label: "Je le refais entièrement moi-même.",
         points: 0.5,
         feedback:
-          "Le brief prend en compte toutes les contraintes du magasin, mais sa préparation demande davantage de temps. Ce choix permet d'éviter les oublis, mais vous ne profitez pas réellement du gain de temps que peut apporter l'IA. À retenir : L'IA peut constituer une bonne base de travail, à condition qu'elle soit relue et adaptée.",
+          "Résultat : Le brief final est amélioré par rapport à la version de départ, mais il n'est pas totalement efficace. Certaines contraintes importantes peuvent être oubliées, comme l'équipe réduite, la livraison en retard ou le rayon à réorganiser. À l'inverse, des éléments moins utiles peuvent être ajoutés, comme la playlist du magasin, les snacks de la pause ou le volume de la musique en réserve. Feedback : C'est une démarche intéressante, parce que vous ne reprenez pas le brief IA tel quel. Mais le tri des informations n'est pas encore assez précis. Pour que l'IA aide vraiment, il faut lui donner les bons éléments de contexte, sans l'encombrer avec des détails qui ne changent pas l'organisation de l'opération promo. À retenir : L'IA peut aider à construire un brief plus clair, mais la qualité du résultat dépend des informations que vous lui donnez. Il faut garder les contraintes utiles, retirer les éléments secondaires et toujours adapter le message à la réalité du terrain.",
       },
     ],
   },

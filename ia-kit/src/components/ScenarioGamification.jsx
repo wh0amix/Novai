@@ -49,13 +49,16 @@ function Scenario4Game({ scenario, onSelect }) {
   const hasAllSafe = zones.safe.filter((item) => item.kind === 'safe').length === 2;
   const hasAllSecret = zones.shred.filter((item) => item.kind === 'secret').length === 3;
   const isCorrectSort = allPlaced && safeIsCorrect && shredIsCorrect && hasAllSafe && hasAllSecret;
+  const hasSensitiveInSafeZone = zones.safe.some((item) => item.kind === 'secret');
+  const isPartialCleanWithRisk = allPlaced && !isCorrectSort && !allInDeck && !allInShred && hasSensitiveInSafeZone;
 
   const inferredChoiceId = useMemo(() => {
     if (isCorrectSort) return 'a';
+    if (isPartialCleanWithRisk) return 'partial-clean';
     if (allInShred) return 'b';
     if (allInDeck) return 'c';
     return null;
-  }, [allInDeck, allInShred, isCorrectSort]);
+  }, [allInDeck, allInShred, isCorrectSort, isPartialCleanWithRisk]);
 
   const boardEntries = useMemo(() => {
     const zoneLabels = {
@@ -77,7 +80,17 @@ function Scenario4Game({ scenario, onSelect }) {
 
   useEffect(() => {
     if (!inferredChoiceId) return;
-    const choice = getChoiceById(scenario, inferredChoiceId);
+    const choice = inferredChoiceId === 'partial-clean'
+      ? {
+        id: 'partial-clean',
+        profile: 'explorer',
+        title: 'Je nettoie partiellement le fichier',
+        label: 'Je nettoie partiellement le fichier avant de l\'envoyer.',
+        points: 0.5,
+        feedback:
+          "Résultat : L'IA arrive à analyser une partie des ventes, mais le fichier contient encore des informations sensibles. Même si vous avez retiré certains éléments, des données confidentielles restent visibles, comme des marges exactes, des noms de fournisseurs ou des identifiants employés. Feedback : C'est une intention plutôt positive, parce que vous avez commencé à nettoyer le fichier avant de l'envoyer. Mais ce n'est pas suffisant : dès qu'il reste des données sensibles, le risque de confidentialité existe toujours. L'IA peut être utile pour analyser les ventes, mais seulement si les informations envoyées sont vraiment filtrées et anonymisées. À retenir : Nettoyer un fichier à moitié ne suffit pas. Avant d'utiliser une IA, il faut vérifier que toutes les données sensibles ont bien été retirées ou anonymisées.",
+      }
+      : getChoiceById(scenario, inferredChoiceId);
     if (!choice) return;
 
     onSelect({
@@ -216,14 +229,16 @@ function Scenario5Game({ scenario, onSelect }) {
   const allSensitiveRedacted = sensitiveIds.every((id) => redactedIds.includes(id));
   const allFieldsRedacted = redactedIds.length === hrFields.length;
   const noFieldRedacted = redactedIds.length === 0;
+  const hasPartialRedactionWithSensitiveLeft = redactedIds.length > 0 && !allSensitiveRedacted;
   const onlySensitiveRedacted = allSensitiveRedacted && !allFieldsRedacted && redactedIds.length === sensitiveIds.length;
 
   const inferredChoiceId = useMemo(() => {
+    if (hasPartialRedactionWithSensitiveLeft) return 'partial-redaction';
     if (onlySensitiveRedacted) return 'c';
     if (allFieldsRedacted) return 'a';
     if (noFieldRedacted) return 'b';
     return null;
-  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted]);
+  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted, hasPartialRedactionWithSensitiveLeft]);
 
   const redactionEntries = useMemo(() => (
     hrFields.map((field) => ({
@@ -236,7 +251,17 @@ function Scenario5Game({ scenario, onSelect }) {
 
   useEffect(() => {
     if (!inferredChoiceId) return;
-    const choice = getChoiceById(scenario, inferredChoiceId);
+    const choice = inferredChoiceId === 'partial-redaction'
+      ? {
+        id: 'partial-redaction',
+        profile: 'explorer',
+        title: "J'anonymise une partie des infos, mais il reste des données sensibles",
+        label: "J'anonymise une partie des infos, mais il reste des données sensibles.",
+        points: 0.5,
+        feedback:
+          "Résultat : L'IA peut vous aider à préparer l'entretien, mais certaines informations personnelles restent visibles. Même si une partie du document a été anonymisée, le nom, l'email, l'adresse ou certains commentaires peuvent encore permettre d'identifier le collaborateur. Feedback : C'est un bon début, parce que vous avez pensé à masquer certaines informations. Mais ce n'est pas suffisant : les données RH sont sensibles et doivent être protégées complètement avant d'être partagées avec une IA. Une anonymisation partielle peut quand même créer un risque pour la confidentialité. À retenir : Anonymiser un peu ne suffit pas. Avant d'utiliser l'IA, il faut retirer toutes les informations qui permettent d'identifier un collaborateur et respecter les règles internes de l'entreprise.",
+      }
+      : getChoiceById(scenario, inferredChoiceId);
     if (!choice) return;
 
     onSelect({
@@ -267,8 +292,12 @@ function Scenario5Game({ scenario, onSelect }) {
       return 'Aucune anonymisation : risque élevé de partage de données personnelles.';
     }
 
+    if (hasPartialRedactionWithSensitiveLeft) {
+      return 'Anonymisation partielle : des données sensibles restent encore visibles.';
+    }
+
     return 'Anonymisation partielle : continuez pour atteindre un niveau de sécurité cohérent.';
-  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted]);
+  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted, hasPartialRedactionWithSensitiveLeft]);
 
   return (
     <div className="scenario-game-card">
@@ -354,7 +383,7 @@ function Scenario7Game({ scenario, onSelect }) {
     <div className="scenario-game-card">
       <div className="game-header">
         <span className="game-kicker">Mini-jeu</span>
-        <p className="game-instruction">Recomposez le nouveau brief avec les éléments utiles pour l\'équipe.</p>
+        <p className="game-instruction">Recomposez le nouveau brief avec les éléments utiles pour l'équipe.</p>
       </div>
 
       <div className="brief-board">
