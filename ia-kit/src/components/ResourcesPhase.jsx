@@ -141,18 +141,21 @@ const docs = [
 ];
 
 export default function ResourcesPhase() {
-  const { showResults } = useQuiz();
+  const { showResults, userProfile } = useQuiz();
+  const hasResults = Boolean(userProfile);
 
   return (
     <section className="resources-phase phase" aria-label="Ressources IA">
 
       {/* Back button */}
-      <button className="resources-back-btn" onClick={showResults}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-        Retour aux résultats
-      </button>
+      {hasResults && (
+        <button className="resources-back-btn" onClick={showResults}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Retour aux résultats
+        </button>
+      )}
 
       {/* Page title */}
       <div className="resources-header">
@@ -305,7 +308,7 @@ export default function ResourcesPhase() {
       <div className="resources-footer-cta">
         <p className="resources-footer-cta-text">Besoin d'aide ou de formation complémentaire ?</p>
         <a href="mailto:ia-support@entreprise.fr" className="resources-footer-cta-btn">
-          Contacter le support IA
+          Contacter le support Novaï
         </a>
       </div>
 

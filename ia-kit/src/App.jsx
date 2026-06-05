@@ -8,6 +8,7 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const goHome = () => dispatch({ type: 'GO_HOME' });
+  const goToResources = () => dispatch({ type: 'SHOW_RESOURCES' });
   const goToResults = () => {
     dispatch({ type: 'SHOW_RESULTS' });
     setMenuOpen(false);
@@ -31,7 +32,7 @@ function Header() {
       />
       <nav className="app-nav">
         <span className="app-nav-link" onClick={goHome} style={{ cursor: 'pointer' }}>Formation</span>
-        <span className="app-nav-link">Ressources</span>
+        <span className="app-nav-link" onClick={goToResources} style={{ cursor: 'pointer' }}>Ressources</span>
         <div className="profile-menu">
           <button
             className="profile-avatar"

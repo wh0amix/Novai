@@ -102,8 +102,9 @@ const nextSteps = [
 ];
 
 export default function ResultPhase() {
-  const { userProfile, answers, showResources, userIdentity, reviewCount, memoDownloaded, downloadMemo } = useQuiz();
+  const { userProfile, answers, showResources, userIdentity, reviewCount, memoDownloaded, downloadMemo, restart } = useQuiz();
   const emailSentRef = useRef(false);
+  const closingRef = useRef(false);
 
   function handleMemoDownload() {
     const link = document.createElement('a');
@@ -111,6 +112,31 @@ export default function ResultPhase() {
     link.download = 'Mémo-Formation-IA.pdf';
     link.click();
     downloadMemo();
+  }
+
+  async function handleSendAndClose() {
+    if (!userProfile || closingRef.current) return;
+    closingRef.current = true;
+
+    if (!emailSentRef.current) {
+      emailSentRef.current = true;
+      try {
+        await sendResultsToHR({ profile: userProfile, score: userProfile.score, answers, userIdentity, reviewCount });
+      } catch (err) {
+        console.error('[Brevo] Échec envoi email :', err.message);
+      }
+    }
+
+    if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'NOVAI_CLOSE_MODULE' }, '*');
+    }
+
+    if (typeof window !== 'undefined') {
+      window.close();
+      window.setTimeout(() => {
+        if (!window.closed) restart();
+      }, 120);
+    }
   }
 
   useEffect(() => {
@@ -192,7 +218,7 @@ export default function ResultPhase() {
             </svg>
           </div>
           <div>
-            <strong>Attention :</strong> vous avez consulté les choix {reviewCount} fois pendant la formation. Cela peut indiquer une difficulté à identifier les bonnes pratiques IA — pensez à relire les ressources disponibles.
+            <strong>Attention :</strong> vous avez consulté les choix {reviewCount} fois pendant la formation. Cela peut indiquer une difficulté à identifier les bonnes pratiques IA — pensez à relire les ressources disponibles. Il est possible que vous deviez repasser la formation dans la durée pour vérifier que les acquis sont bien validés.
           </div>
         </div>
       )}
@@ -370,6 +396,9 @@ export default function ResultPhase() {
         <p className="result-footer-brand">
           Formation propulsée par <strong>NOVAÏ</strong> • Juin 2026
         </p>
+        <button className="result-action-btn result-action-btn--blue result-close-module-btn" onClick={handleSendAndClose}>
+          Envoyer vos résultats et fermer le module
+        </button>
       </div>
 
     </section>

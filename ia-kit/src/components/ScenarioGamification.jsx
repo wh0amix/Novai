@@ -345,14 +345,16 @@ function Scenario7Game({ scenario, onSelect }) {
     .filter((info) => info.important)
     .map((info) => info.id);
   const selectedIds = addedInfos.map((info) => info.id);
+  const selectedImportantCount = addedInfos.filter((info) => info.important).length;
   const hasAllImportant = importantIds.every((id) => selectedIds.includes(id));
+  const hasOnlyOptional = addedInfos.length > 0 && selectedImportantCount === 0;
   const selectedNonImportantCount = addedInfos.filter((info) => !info.important).length;
 
   const inferredChoiceId = useMemo(() => {
-    if (addedInfos.length === 0) return 'b';
+    if (addedInfos.length === 0 || hasOnlyOptional) return 'b';
     if (hasAllImportant && selectedNonImportantCount === 0) return 'a';
     return 'c';
-  }, [addedInfos.length, hasAllImportant, selectedNonImportantCount]);
+  }, [addedInfos.length, hasAllImportant, hasOnlyOptional, selectedNonImportantCount]);
 
   useEffect(() => {
     if (!inferredChoiceId) return;
@@ -373,11 +375,13 @@ function Scenario7Game({ scenario, onSelect }) {
       return 'Excellent : vous avez intégré les informations critiques du terrain sans surcharger le brief.';
     }
     if (inferredChoiceId === 'b') {
-      return 'Aucune information ajoutée : cela revient à utiliser le brief IA tel quel.';
+      return hasOnlyOptional
+        ? 'Brief non pertinent : uniquement des éléments optionnels ont été ajoutés, sans contraintes critiques.'
+        : 'Aucune information ajoutée : cela revient à utiliser le brief IA tel quel.';
     }
 
     return 'Brief partiellement ajusté ou surchargé : utile, mais moins efficace que de cibler les vraies contraintes.';
-  }, [inferredChoiceId]);
+  }, [inferredChoiceId, hasOnlyOptional]);
 
   return (
     <div className="scenario-game-card">
