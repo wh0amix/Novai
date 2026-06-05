@@ -108,8 +108,8 @@ export default function ResultPhase() {
 
   function handleMemoDownload() {
     const link = document.createElement('a');
-    link.href = '/memo-formation-IA.pdf';
-    link.download = 'memo-formation-IA.pdf';
+    link.href = '/memo-ia.pdf';
+    link.download = 'memo-ia.pdf';
     link.click();
     downloadMemo();
   }
@@ -164,9 +164,12 @@ export default function ResultPhase() {
     realPoints,
     correctedCount,
     profilePercentages,
+    realProfileKey,
   } = userProfile;
+  const activeProfileKey = realProfileKey ?? userProfile.key;
   const vigilanceFromRealScore = getVigilanceFromRealScore(realScore);
   const scoreColorClass = score >= 70 ? 'result-score-card--green' : score >= 40 ? 'result-score-card--orange' : 'result-score-card--red';
+  const hasLowScoresWarning = realScore <= 45 && improvedScore <= 45;
 
   if (!memoDownloaded) {
     return (
@@ -219,6 +222,21 @@ export default function ResultPhase() {
           </div>
           <div>
             <strong>Attention :</strong> vous avez consulté les choix {reviewCount} fois pendant la formation. Cela peut indiquer une difficulté à identifier les bonnes pratiques IA — pensez à relire les ressources disponibles. Il est possible que vous deviez repasser la formation dans la durée pour vérifier que les acquis sont bien validés.
+          </div>
+        </div>
+      )}
+
+      {hasLowScoresWarning && (
+        <div className="result-review-warning" role="alert" aria-live="polite">
+          <div className="result-review-warning-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <strong>Prévention :</strong> vos scores réel et corrigé restent bas. Cela indique que les bonnes pratiques IA ne sont pas encore suffisamment acquises. Il est fortement recommandé de relire les ressources puis de repasser le test pour valider durablement les acquis.
           </div>
         </div>
       )}
@@ -309,7 +327,7 @@ export default function ResultPhase() {
               ['skeptic', 'Le Sceptique'],
             ].map(([key, label]) => {
               const value = profilePercentages?.[key] ?? 0;
-              const isMainProfile = key === userProfile.key;
+              const isMainProfile = key === activeProfileKey;
               return (
                 <div key={key} className="result-profile-score-row">
                   <div className="result-profile-score-row-top">
@@ -328,7 +346,7 @@ export default function ResultPhase() {
               );
             })}
             <p className="result-profile-score-note">
-              Le profil avec le pourcentage le plus élevé détermine votre profil final.
+              Le profil réel avec le pourcentage le plus élevé détermine l'indexation du score profil.
             </p>
           </div>
 

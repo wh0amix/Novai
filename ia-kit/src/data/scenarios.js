@@ -299,7 +299,7 @@ const scenarios = [
   {
     id: 'internal-communication',
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    title: 'Communication interne rédigée par l\'IA :',
+    title: 'Communication interne rédigée par l\'IA : ',
     subtitle: 'valider le fond avant la forme',
     context:
       "Votre directeur vous demande de transmettre à votre équipe une nouvelle procédure de sécurité concernant votre rayon. Pour gagner du temps, vous demandez à l'IA de rédiger une note simple et claire à diffuser sur le groupe interne. Le message proposé est bien structuré, mais en le relisant, vous remarquez qu'il contient une consigne imprécise sur le moment où la procédure doit être appliquée. Quelle est la meilleure réaction ?",
@@ -307,8 +307,8 @@ const scenarios = [
       {
         id: 'a',
         profile: 'captain',
-        title: "Je vérifie la consigne avec la procédure officielle",
-        label: "Je vérifie la consigne avec la procédure officielle avant de la transmettre.",
+        title: "Je réécris la consigne avec la procédure officielle",
+        label: "Je réécris la consigne avec la procédure officielle avant de la transmettre.",
         points: 1,
         feedback:
           "Très bonne pratique. L'équipe reçoit une information fiable, adaptée à la réalité du magasin et conforme aux règles internes. Vous utilisez l'IA comme appui rédactionnel, mais vous sécurisez le contenu avant diffusion. À retenir : Le manager doit toujours valider les informations générées par l'IA, surtout quand elles concernent la sécurité, l'organisation ou les procédures.",

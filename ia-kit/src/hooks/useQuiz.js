@@ -40,6 +40,10 @@ export default function useQuiz() {
       return acc;
     }, {});
 
+    const maxRealCount = Math.max(...Object.values(realCounts));
+    const topRealProfiles = Object.keys(realCounts).filter((k) => realCounts[k] === maxRealCount);
+    const realProfileKey = topRealProfiles.length === 1 ? topRealProfiles[0] : 'explorer';
+
     const counts = finalAnswers.reduce((acc, answer) => {
       acc[answer.profile] = (acc[answer.profile] || 0) + 1;
       return acc;
@@ -72,6 +76,7 @@ export default function useQuiz() {
 
     return {
       key: profileKey,
+      realProfileKey,
       ...profiles[profileKey],
       score: improvedScore,
       realScore,

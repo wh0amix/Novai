@@ -32,6 +32,15 @@ const promoInfoOptions = [
   { id: 'music-volume', label: 'Ajuster le volume de la musique en réserve', important: false },
 ];
 
+function shuffleOptions(options) {
+  const shuffled = [...options];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 function getChoiceById(scenario, choiceId) {
   return scenario.choices.find((choice) => choice.id === choiceId) ?? null;
 }
@@ -226,19 +235,21 @@ function Scenario5Game({ scenario, onSelect }) {
   const [redactedIds, setRedactedIds] = useState([]);
 
   const sensitiveIds = hrFields.filter((field) => field.sensitive).map((field) => field.id);
+  const hasOnlyOptionalRedaction = redactedIds.length > 0 && redactedIds.every((id) => !sensitiveIds.includes(id));
   const allSensitiveRedacted = sensitiveIds.every((id) => redactedIds.includes(id));
   const allFieldsRedacted = redactedIds.length === hrFields.length;
   const noFieldRedacted = redactedIds.length === 0;
-  const hasPartialRedactionWithSensitiveLeft = redactedIds.length > 0 && !allSensitiveRedacted;
+  const hasPartialRedactionWithSensitiveLeft = redactedIds.length > 0 && !allSensitiveRedacted && !hasOnlyOptionalRedaction;
   const onlySensitiveRedacted = allSensitiveRedacted && !allFieldsRedacted && redactedIds.length === sensitiveIds.length;
 
-  const inferredChoiceId = useMemo(() => {
+  const inferredChoiceId = (() => {
+    if (hasOnlyOptionalRedaction) return 'b';
     if (hasPartialRedactionWithSensitiveLeft) return 'partial-redaction';
     if (onlySensitiveRedacted) return 'c';
     if (allFieldsRedacted) return 'a';
     if (noFieldRedacted) return 'b';
     return null;
-  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted, hasPartialRedactionWithSensitiveLeft]);
+  })();
 
   const redactionEntries = useMemo(() => (
     hrFields.map((field) => ({
@@ -281,7 +292,7 @@ function Scenario5Game({ scenario, onSelect }) {
     ));
   }
 
-  const status = useMemo(() => {
+  const status = (() => {
     if (onlySensitiveRedacted) {
       return 'Anonymisation optimale : seules les données sensibles sont masquées.';
     }
@@ -292,12 +303,16 @@ function Scenario5Game({ scenario, onSelect }) {
       return 'Aucune anonymisation : risque élevé de partage de données personnelles.';
     }
 
+    if (hasOnlyOptionalRedaction) {
+      return 'Anonymisation non pertinente : seules des informations optionnelles sont masquées, les données critiques restent exposées.';
+    }
+
     if (hasPartialRedactionWithSensitiveLeft) {
       return 'Anonymisation partielle : des données sensibles restent encore visibles.';
     }
 
     return 'Anonymisation partielle : continuez pour atteindre un niveau de sécurité cohérent.';
-  }, [allFieldsRedacted, noFieldRedacted, onlySensitiveRedacted, hasPartialRedactionWithSensitiveLeft]);
+  })();
 
   return (
     <div className="scenario-game-card">
@@ -332,6 +347,7 @@ function Scenario5Game({ scenario, onSelect }) {
 
 function Scenario7Game({ scenario, onSelect }) {
   const [addedInfos, setAddedInfos] = useState([]);
+  const [displayedOptions] = useState(() => shuffleOptions(promoInfoOptions));
 
   function addInfo(info) {
     setAddedInfos((current) => (
@@ -403,7 +419,7 @@ function Scenario7Game({ scenario, onSelect }) {
         <div className="brief-card brief-card--editable">
           <p className="brief-title">Informations à intégrer au nouveau brief</p>
           <div className="brief-tags">
-            {promoInfoOptions.map((info) => (
+            {displayedOptions.map((info) => (
               <button
                 key={info.id}
                 type="button"
