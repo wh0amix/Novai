@@ -108,8 +108,8 @@ export default function ResultPhase() {
 
   function handleMemoDownload() {
     const link = document.createElement('a');
-    link.href = '/MEMO.pdf';
-    link.download = 'Mémo-Formation-IA.pdf';
+    link.href = '/memo-formation-IA.pdf';
+    link.download = 'memo-formation-IA.pdf';
     link.click();
     downloadMemo();
   }
