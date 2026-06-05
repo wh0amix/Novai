@@ -813,42 +813,6 @@ body {
   background: rgba(67,71,243,0.08);
 }
 
-.game-mobile-actions {
-  display: none;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-  margin-top: 0.75rem;
-}
-
-.game-mobile-btn {
-  border: 1px solid var(--color-secondary);
-  background: rgba(67,71,243,0.08);
-  color: var(--color-secondary);
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: 600;
-  min-height: 44px;
-  padding: 0.65rem 0.75rem;
-  cursor: pointer;
-}
-
-.game-mobile-btn:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-
-.game-mobile-btn--danger {
-  border-color: var(--color-danger);
-  color: var(--color-danger);
-  background: rgba(227,30,36,0.08);
-}
-
-.game-mobile-btn--neutral {
-  border-color: var(--color-text-muted);
-  color: var(--color-text-muted);
-  background: rgba(107,107,107,0.08);
-}
-
 .game-status {
   font-size: 0.86rem;
   color: var(--color-text-muted);
@@ -2406,10 +2370,6 @@ body {
     padding: 1rem;
   }
 
-  .game-mobile-actions {
-    display: grid;
-  }
-
   .game-dropzone {
     min-height: 170px;
     padding: 0.85rem;
@@ -2425,12 +2385,6 @@ body {
 
   .result-title {
     font-size: 2.25rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .game-mobile-actions {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -2455,7 +2409,6 @@ body {
   .game-actions-row { flex-direction: column; }
   .game-alt-btn, .game-primary-btn { width: 100%; }
   .game-touch-guide { font-size: 0.78rem; }
-  .game-mobile-btn { font-size: 0.78rem; }
   .game-zone-title { font-size: 0.82rem; }
   .redaction-line { flex-direction: column; align-items: flex-start; }
   .resources-practices-grid { grid-template-columns: 1fr; }
