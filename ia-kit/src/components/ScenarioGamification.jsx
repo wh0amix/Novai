@@ -226,6 +226,33 @@ function Scenario4Game({ scenario, onSelect }) {
           : 'Aucune carte sélectionnée.'}
       </p>
 
+      <div className="game-mobile-actions" aria-label="Déplacer la carte sélectionnée">
+        <button
+          type="button"
+          className="game-mobile-btn game-mobile-btn--neutral"
+          onClick={() => handleMoveSelected('deck')}
+          disabled={!selectedCardId}
+        >
+          Fichier brut
+        </button>
+        <button
+          type="button"
+          className="game-mobile-btn"
+          onClick={() => handleMoveSelected('safe')}
+          disabled={!selectedCardId}
+        >
+          Dossier sécurisé
+        </button>
+        <button
+          type="button"
+          className="game-mobile-btn game-mobile-btn--danger"
+          onClick={() => handleMoveSelected('shred')}
+          disabled={!selectedCardId}
+        >
+          Broyeur
+        </button>
+      </div>
+
       <p className="game-status">{status}</p>
     </div>
   );
