@@ -1,16 +1,85 @@
-# React + Vite
+# NOVAÏ — Kit de sensibilisation à l'IA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application web de formation destinée aux managers de la grande distribution. Parcours de 10 scénarios métier avec profil utilisateur en sortie.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- **React 19** + **Vite 8**
+- **CSS custom** (polices Romie & ABC Monument Grotesk)
+- **Context API + useReducer** — état global
+- **EmailJS** — envoi des résultats aux RH
+- **Jose** — vérification de token JWT 
+- **Vercel** — hébergement
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## Variables d'environnement
+
+Créer un fichier `.env` à la racine de `ia-kit/` :
+
+```env
+VITE_EMAILJS_SERVICE_ID=
+VITE_EMAILJS_TEMPLATE_ID=
+VITE_EMAILJS_PUBLIC_KEY=
+VITE_HR_EMAIL=
+VITE_JWT_SECRET=
+```
+
+Sans ces variables, l'app fonctionne — l'envoi email et l'identification JWT sont simplement ignorés.
+
+---
+
+## Structure
+
+```
+src/
+├── components/     # Composants UI (ScenarioCard, ChoiceButton, ResultPhase...)
+├── context/        # QuizContext + useReducer
+├── data/
+│   ├── scenarios.js   # 10 scénarios (contexte, choix, feedback, points)
+│   └── profiles.js    # 3 profils (captain, explorer, skeptic)
+├── hooks/
+│   └── useQuiz.js     # Hook principal — expose l'état et les actions
+├── services/
+│   ├── email.js       # Envoi EmailJS à la fin du parcours
+│   └── token.js       # Vérification JWT (identification utilisateur)
+└── App.jsx            # Layout + Header
+```
+
+---
+
+## Fonctionnement
+
+**5 phases :** `Accueil → Intro → Scénarios → Résultats → Ressources`
+
+La navigation est pilotée par `currentPhase` dans le Context — pas de React Router.
+
+Chaque scénario propose 3 choix notés 0, 0.5 ou 1 point. Le profil final est déterminé par le choix majoritaire sur les 10 scénarios. Le score est affiché en pourcentage.
+
+À la fin du parcours :
+1. L'utilisateur doit télécharger le mémo PDF pour accéder à ses résultats
+2. Un email est envoyé automatiquement aux RH (nom, profil, score, détail des réponses)
+
+---
+
+## Déploiement (Vercel)
+
+Le déploiement est automatique à chaque push sur `main`. Vercel détecte Vite et utilise `dist/` comme dossier de sortie.
